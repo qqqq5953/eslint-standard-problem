@@ -9,9 +9,10 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      test: 'asc'
+      test: 'asc',
+      test2: ''
     }
   }
 }
