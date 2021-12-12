@@ -1,3 +1,10 @@
 module.exports = {
-  publicPath: '/eslint-standard-problem/dist/'
+  publicPath: '/eslint-standard-problem/dist/',
+  css: {
+    loaderOptions: {
+      scss: {
+        prependData: `@import "@/assets/scss/main.scss";`,
+      }
+    }
+  }
 }
