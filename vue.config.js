@@ -6,5 +6,10 @@ module.exports = {
         prependData: `@import "@/assets/scss/main.scss";`,
       }
     }
+  },
+  configureWebpack: {
+    externals: {
+      Vue: "vue"
+    }
   }
 }

@@ -11,21 +11,30 @@
         <!--熱門景點-->
         <PopularSection :data="placeData" :class="{ 'd-none': place_display }">
           <template #card_section_title_text
-            >熱門景點<i class="fas fa-fire"></i
-          ></template>
+            >熱門景點<img
+              class="card_section_title_icon"
+              src="@/assets/place-icon.png"
+              alt="place-icon"
+          /></template>
         </PopularSection>
         <!--熱門美食-->
         <PopularSection :data="foodData" :class="{ 'd-none': food_display }">
           <template #card_section_title_text
-            >熱門美食<i class="fas fa-utensils"></i
-          ></template>
+            >熱門美食<img
+              class="card_section_title_icon"
+              src="@/assets/restaurant-icon.png"
+              alt="restaurant-icon"
+          /></template>
         </PopularSection>
 
         <!--近期活動-->
         <PopularSection :data="eventData" :class="{ 'd-none': event_display }">
           <template #card_section_title_text
-            >近期活動<i class="fas fa-star-half-alt"></i
-          ></template>
+            >近期活動<img
+              class="card_section_title_icon"
+              src="@/assets/event-icon.png"
+              alt="event-icon"
+          /></template>
         </PopularSection>
       </section>
     </div>
@@ -212,14 +221,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  // font-family: "Noto Sans TC", sans-serif;
-}
-
+<style lang="scss" scoped>
 body,
 html {
   height: 100%;
@@ -242,5 +244,10 @@ html {
 
 .d-none {
   display: none !important;
+}
+
+.card_section_title_icon {
+  margin-left: 23px;
+  vertical-align: bottom;
 }
 </style>
