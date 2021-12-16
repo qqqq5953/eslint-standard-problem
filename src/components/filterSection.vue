@@ -63,15 +63,19 @@
           </li>
         </template>
       </ul>
-
-      <input
-        type="button"
-        class="banner_filterForm_searchBtn"
-        @click="closeMask()"
-        value="搜尋"
-        :disabled="!this.selectedCityValue"
-        ref="filterBtn"
-      />
+      <router-link :to="{ name: 'filterResult' }">
+        <input
+          type="button"
+          class="banner_filterForm_searchBtn"
+          @click="
+            closeMask();
+            sendFilterData();
+          "
+          value="搜尋"
+          :disabled="!this.selectedCityValue"
+          ref="filterBtn"
+        />
+      </router-link>
     </div>
   </div>
 </template>
@@ -548,6 +552,10 @@ export default {
 //       width: 48%;
 //     }
 //   }
+// }
+
+// .loading_mask {
+//   overflow: hidden;
 // }
 
 // details > summary {

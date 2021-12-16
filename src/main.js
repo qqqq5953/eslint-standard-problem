@@ -13,6 +13,8 @@ import FilterSection from '@/components/FilterSection.vue';
 import SearchSection from '@/components/SearchSection.vue';
 import PopularSection from '@/components/PopularSection.vue';
 import Card from '@/components/Card.vue';
+import FilterResult from '@/views/FilterResult.vue';
+import SearchResult from '@/views/SearchResult.vue';
 
 const emitter = mitt();
 const app = createApp(App).use(VueAxios, axios).use(router);
@@ -22,4 +24,6 @@ app.component('FilterSection', FilterSection);
 app.component('SearchSection', SearchSection);
 app.component('PopularSection', PopularSection);
 app.component('Card', Card);
+app.component('SearchResult', SearchResult);
+app.component('FilterResult', FilterResult);
 app.mount('#app');

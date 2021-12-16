@@ -260,7 +260,9 @@
   }
 }
 
-
+.loading_mask {
+  overflow: hidden;
+}
 
 details > summary {
   list-style: none;

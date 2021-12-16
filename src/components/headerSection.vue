@@ -2,18 +2,22 @@
   <header class="header">
     <nav class="nav">
       <h1>
-        <a href="#" class="logo">
+        <!-- <a href="#" class="logo">
           <img src="@/assets/logo.png" alt="logo" />
           <span class="websiteName">TaiFun旅遊網</span>
-        </a>
+        </a> -->
+        <router-link :to="{ name: 'HomeTest' }" class="logo">
+          <img src="@/assets/logo.png" alt="logo" />
+          <span class="websiteName">TaiFun旅遊網</span>
+        </router-link>
       </h1>
     </nav>
 
     <section class="banner">
       <h2 class="banner_title">尋找台灣</h2>
       <h3 class="banner_subtitle">景點、活動、美食</h3>
-      <div class="banner_search outline">
-        <div class="banner_searchBar outline">
+      <div class="banner_search">
+        <div class="banner_searchBar">
           <input
             type="text"
             placeholder="請輸入關鍵字"
@@ -49,16 +53,12 @@
 
 <script>
 export default {
-  props: ['place', 'food', 'event'],
+  props: ['allData'],
   data() {
     return {
       hasMask: false,
       temp: '',
-      search: '',
-      allPlaceData: [],
-      allFoodData: [],
-      allEventData: [],
-      allData: []
+      search: ''
     };
   },
   methods: {

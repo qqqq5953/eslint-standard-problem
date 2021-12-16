@@ -17,206 +17,79 @@ export default {
     return {
       searchData: []
     };
+  },
+  created() {
+    this.emitter.on('searchData', (data) => {
+      console.log('emit on searchData', data);
+      this.searchData = data;
+    });
   }
 };
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/card.scss';
-// .card {
-//   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.25);
-//   border-radius: 14px;
-//   // width: 366px;
-//   width: 29.5%;
-//   margin-bottom: 70px;
-//   display: flex;
-//   flex-direction: column;
-
-//   &:hover .card_image > .card_description {
-//     border-radius: 14px 14px 0 0;
-//     opacity: 1;
-//     background-color: rgba(0, 0, 0, 0.5);
-//     transform: scale(1);
+@import '@/assets/scss/popularSection.scss';
+// .card_section {
+//   padding: 55px 7%;
+//   &:nth-of-type(2) {
+//     background-color: $color-secondary;
 //   }
 
 //   @include pad {
-//     width: 45%;
+//     padding: 55px 10%;
 //   }
 
 //   @include mobile {
-//     margin-bottom: 34px;
-//     width: 140px;
-//     width: 100%;
+//     padding: 30px 50px;
 //   }
+// }
 
-//   .card_image {
-//     height: 251px;
-//     border-radius: 14px 14px 0 0;
-//     background: linear-gradient(
-//       45deg,
-//       rgba(47, 122, 140, 0.85),
-//       rgba(47, 201, 255, 0.7)
-//     );
-//     position: relative;
+// .card_section_title {
+//   font-weight: bold;
+//   font-size: $font-size-xxl;
+//   color: $color-primary;
+//   margin-bottom: 70px;
 
-//     @include pad {
-//       height: 190px;
-//     }
-
-//     @include mobile {
-//       height: 170px;
-//     }
-
-//     //&::after {
-//     // content: "圖片載入中...";
-//     // position: absolute;
-//     // top: 0;
-//     // bottom: 0;
-//     // left: 0;
-//     // right: 0;
-//     // display: flex;
-//     // justify-content: center;
-//     // align-items: center;
-//     // font-size: 28px;
-//     // font-weight: bold;
-//     // color: #fff;
-
-//     // @include mobile {
-//     // font-size: $font-size-md;
-//     // }
-//     // }
-
-//     img {
-//       border-radius: 14px 14px 0 0;
-//       object-fit: cover;
-//       width: 100%;
-//       height: 251px;
-//       display: block;
-//       position: relative;
-//       z-index: 2;
-
-//       @include pad {
-//         height: 190px;
-//       }
-
-//       @include mobile {
-//         height: 170px;
-//       }
-
-//       &::after {
-//         content: 'Sorry! 無法顯示圖片';
-//         position: absolute;
-//         left: 0;
-//         right: 0;
-//         display: flex;
-//         justify-content: center;
-//         align-items: center;
-//         height: 95%;
-//         font-size: 28px;
-//         font-weight: bold;
-
-//         @include pad {
-//           font-size: $font-size-md;
-//         }
-//       }
-//     }
-
-//     .card_description {
-//       position: absolute;
-//       padding: 16px 30px;
-//       top: 0;
-//       bottom: 0;
-//       z-index: 3;
-//       color: #efefef;
-//       font-size: $font-size-lg;
-//       line-height: 1.9;
-//       -webkit-line-clamp: 6;
-//       -webkit-box-orient: vertical;
-//       display: -webkit-box;
-//       overflow: hidden;
-//       opacity: 0;
-//       transform: scale(0);
-//       transition: 0.4s;
-
-//       @include pad {
-//         font-size: $font-size-sm;
-//         line-height: 2;
-//       }
-
-//       @include mobile {
-//         -webkit-line-clamp: 5;
-//         line-height: 2.15;
-//       }
-//     }
-//   }
-
-//   .card_body {
-//     padding: 18px 26px 32px;
-//     color: $color-dark-50;
-//     line-height: 1.2;
-//   }
-
-//   .card_header {
-//     font-weight: 700;
+//   @include mobile {
 //     font-size: $font-size-md;
-
-//     @include mobile {
-//       font-size: $font-size-xs;
-//     }
+//     text-align: center;
+//     margin-bottom: 30px;
 //   }
 
-//   .card_header_location .fa-map-marker-alt {
-//     color: $color-danger;
-//     margin-right: 12px;
+//   .fas {
+//     margin-left: 24px;
+//   }
+// }
+
+// .card_section_title_icon {
+//   margin-left: 23px;
+// }
+
+// .card_section_content {
+//   display: flex;
+//   justify-content: space-between;
+//   flex-wrap: wrap;
+// }
+
+// .card_section_morePlaceBtn {
+//   @include btn-reset;
+//   background-color: $color-white-50;
+//   color: $color-primary;
+//   font-size: $font-size-xl;
+//   font-weight: 700;
+//   border: 3px solid $color-primary;
+//   border-radius: 20px;
+//   width: 61%;
+//   display: block;
+//   margin: 0 auto;
+
+//   @include pad {
+//     border-radius: 10px;
 //   }
 
-//   .card_header_title {
-//     margin-top: 15px;
-
-//     @include mobile {
-//       margin-top: 7px;
-//     }
-//   }
-
-//   .card_openTime {
-//     h5 {
-//       margin-top: 13px;
-//       margin-bottom: 7px;
-
-//       @include mobile {
-//         margin-top: 5px;
-//       }
-//     }
-
-//     .card_openTime_details {
-//       line-height: 1.5;
-//       text-overflow: ellipsis;
-//       overflow: hidden;
-//       white-space: nowrap;
-//     }
-
-//     @include mobile {
-//       font-size: $font-size-xxs;
-//     }
-//   }
-
-//   .card_moreInfoBtn {
-//     @include btn-reset;
-//     @include btn-rectangle;
-//     @include btn-hover;
-//     font-size: $font-size-lg;
-//     display: block;
-//     margin: auto auto 27px;
-//     width: 59%;
-
-//     @include pad {
-//       border-radius: 10px;
-//     }
-
-//     @include mobile {
-//       font-size: $font-size-xs;
-//       width: 85%;
-//     }
+//   @include mobile {
+//     font-size: $font-size-sm;
+//     width: 85%;
 //   }
 // }
 </style>

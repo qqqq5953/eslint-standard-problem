@@ -1,12 +1,36 @@
 <template>
   <div class="wrap">
-    <HeaderSection
-      :place="placeData"
-      :food="foodData"
-      :event="eventData"
-      :allData="allData"
-    ></HeaderSection>
-    <router-view></router-view>
+    <!-- <SearchSection :class="{ 'd-none': searchStatus }"></SearchSection> -->
+    <section :class="{ 'd-none': !searchStatus }">
+      <router-view :data="placeData"></router-view>
+      <!-- <PopularSection :data="placeData">
+        <template #card_section_title_text
+          >熱門景點<img
+            class="card_section_title_icon"
+            src="@/assets/place-icon.png"
+            alt="place-icon"
+        /></template>
+      </PopularSection> -->
+
+      <!-- :class="{ 'd-none': place_display }" -->
+      <!-- <PopularSection :data="foodData" :class="{ 'd-none': food_display }">
+        <template #card_section_title_text
+          >熱門美食<img
+            class="card_section_title_icon"
+            src="@/assets/restaurant-icon.png"
+            alt="restaurant-icon"
+        /></template>
+      </PopularSection> -->
+
+      <!-- <PopularSection :data="eventData" :class="{ 'd-none': event_display }">
+        <template #card_section_title_text
+          >近期活動<img
+            class="card_section_title_icon"
+            src="@/assets/event-icon.png"
+            alt="event-icon"
+        /></template>
+      </PopularSection> -->
+    </section>
   </div>
 </template>
 
@@ -54,7 +78,13 @@ export default {
       regionData: [],
       allData: [],
       filteredData: '',
-      filteredTypeData: ''
+      filteredTypeData: '',
+      // component 呈現狀態
+      maskStatus: false,
+      searchStatus: true,
+      place_display: false,
+      food_display: false,
+      event_display: false
     };
   },
   computed: {
@@ -69,6 +99,29 @@ export default {
     eventUrl() {
       if (this.filteredData === '') return this.defaultEventUrl;
       return `https://ptx.transportdata.tw/MOTC/v2/Tourism/${this.filteredTypeData}/${this.filteredData}?$top=100&$format=JSON`;
+    }
+  },
+  watch: {
+    filteredData() {
+      this.place_display = false;
+      this.food_display = false;
+      this.event_display = false;
+
+      if (this.filteredTypeData === 'ScenicSpot') {
+        this.getPlaceData();
+        this.food_display = true;
+        this.event_display = true;
+      }
+      if (this.filteredTypeData === 'Restaurant') {
+        this.getFoodData();
+        this.place_display = true;
+        this.event_display = true;
+      }
+      if (this.filteredTypeData === 'Activity') {
+        this.getEventData();
+        this.place_display = true;
+        this.food_display = true;
+      }
     }
   },
   methods: {
@@ -141,25 +194,25 @@ export default {
   created() {
     this.getAllData();
 
-    // // 篩選後遮罩控制
-    // this.emitter.on('activate-loading', (data) => {
-    //   console.log('遮罩是否打開?', data);
-    //   this.maskStatus = data;
-    // });
+    // 篩選後遮罩控制
+    this.emitter.on('activate-loading', (data) => {
+      console.log('遮罩是否打開?', data);
+      this.maskStatus = data;
+    });
 
-    // // 接收篩選資料
-    // this.emitter.on('filteredData', (data) => {
-    //   this.filteredTypeData = data.selectedType;
-    //   console.log('this.filteredTypeData', this.filteredTypeData);
+    // 接收篩選資料
+    this.emitter.on('filteredData', (data) => {
+      this.filteredTypeData = data.selectedType;
+      console.log('this.filteredTypeData', this.filteredTypeData);
 
-    //   this.filteredData = data.place;
-    //   console.log('this.filteredData', this.filteredData);
-    // });
+      this.filteredData = data.place;
+      console.log('this.filteredData', this.filteredData);
+    });
 
-    // // 搜尋後區域控制
-    // this.emitter.on('searchStatus', (data) => {
-    //   this.searchStatus = data;
-    // });
+    // 搜尋後區域控制
+    this.emitter.on('searchStatus', (data) => {
+      this.searchStatus = data;
+    });
   }
 };
 </script>

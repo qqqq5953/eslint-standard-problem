@@ -45,6 +45,9 @@ export default {
 
 <style lang="scss">
 @import '@/assets/scss/card.scss';
+// .d-none {
+//   display: none !important;
+// }
 // .card {
 //   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.25);
 //   border-radius: 14px;

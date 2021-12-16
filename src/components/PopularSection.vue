@@ -10,11 +10,73 @@
       看更多熱們景點
     </button>
   </section>
+  <!-- {{ test }} -->
 </template>
 
 <script>
+// import JsSHA from 'jssha';
 export default {
-  props: ['data']
+  props: ['data'],
+  data() {
+    return {
+      test: [],
+      filteredTypeData: '',
+      filteredData: ''
+    };
+  },
+  // computed: {
+  //   config: { headers: this.GetAuthorizationHeader() },
+  //   defaultPlaceUrl:
+  //     'https://ptx.transportdata.tw/MOTC/v2/Tourism/ScenicSpot/Taipei?$top=6&$format=JSON',
+  //   defaultFoodUrl:
+  //     'https://ptx.transportdata.tw/MOTC/v2/Tourism/Restaurant/Taipei?$top=6&$format=JSON',
+  //   defaultEventUrl:
+  //     'https://ptx.transportdata.tw/MOTC/v2/Tourism/Activity/Taipei?$top=6&$format=JSON',
+  //   placeUrl() {
+  //     if (this.filteredData === '') return this.defaultPlaceUrl;
+  //     return `https://ptx.transportdata.tw/MOTC/v2/Tourism/${this.filteredTypeData}/${this.filteredData}?$top=100&$format=JSON`;
+  //   },
+  //   foodUrl() {
+  //     if (this.filteredData === '') return this.defaultFoodUrl;
+  //     return `https://ptx.transportdata.tw/MOTC/v2/Tourism/${this.filteredTypeData}/${this.filteredData}?$top=100&$format=JSON`;
+  //   },
+  //   eventUrl() {
+  //     if (this.filteredData === '') return this.defaultEventUrl;
+  //     return `https://ptx.transportdata.tw/MOTC/v2/Tourism/${this.filteredTypeData}/${this.filteredData}?$top=100&$format=JSON`;
+  //   }
+  // },
+  // methods: {
+  //   GetAuthorizationHeader() {
+  //     const AppID = '096409078e0c483f87d2ae7551b214ea';
+  //     const AppKey = '4s6NU76FhxsKZGCH06RzkVnXoSk';
+
+  //     const GMTString = new Date().toGMTString();
+  //     const ShaObj = new JsSHA('SHA-1', 'TEXT');
+  //     ShaObj.setHMACKey(AppKey, 'TEXT');
+  //     ShaObj.update('x-date: ' + GMTString);
+  //     const HMAC = ShaObj.getHMAC('B64');
+  //     const Authorization =
+  //       'hmac username="' +
+  //       AppID +
+  //       '", algorithm="hmac-sha1", headers="x-date", signature="' +
+  //       HMAC +
+  //       '"';
+  //     return {
+  //       Authorization: Authorization,
+  //       'X-Date': GMTString
+  //     };
+  //   }
+  // }
+  created() {
+    // 接收篩選資料
+    this.emitter.on('filteredData', (data) => {
+      this.filteredTypeData = data.selectedType;
+      console.log('this.filteredTypeData', this.filteredTypeData);
+
+      this.filteredData = data.place;
+      console.log('this.filteredData', this.filteredData);
+    });
+  }
 };
 </script>
 
