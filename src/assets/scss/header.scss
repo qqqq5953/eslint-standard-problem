@@ -156,6 +156,7 @@
   .banner_searchBtn {
     @include btn-reset;
     font-size: 22px;
+    text-decoration: none;
   }
 
   .banner_filterBtn {

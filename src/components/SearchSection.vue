@@ -4,7 +4,7 @@
       <span>搜尋結果</span>
       <i class="fas fa-fire"></i>
     </h3>
-    <div class="card_section_content">
+    <div v-if="searchData" class="card_section_content">
       <Card v-for="obj in searchData" :key="obj.ID" :item="obj"></Card>
     </div>
     <button type="button" class="card_section_morePlaceBtn">看更多結果</button>
@@ -17,12 +17,6 @@ export default {
     return {
       searchData: []
     };
-  },
-  created() {
-    this.emitter.on('searchData', (data) => {
-      console.log('emit on searchData', data);
-      this.searchData = data;
-    });
   }
 };
 </script>

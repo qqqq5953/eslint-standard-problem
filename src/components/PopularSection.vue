@@ -1,80 +1,56 @@
 <template>
   <section class="card_section">
     <div class="card_section_title">
-      <slot name="card_section_title_text"></slot>
+      <!-- <slot name="card_section_title_text"></slot> -->
+      <div>{{ searchTypeData }}</div>
+      <img
+        v-if="searchTypeData === '熱門景點'"
+        src="@/assets/images/place-icon.png"
+        alt="place-icon"
+      />
+      <img
+        v-else-if="searchTypeData === '熱門美食'"
+        src="@/assets/images/restaurant-icon.png"
+        alt="restaurant-icon"
+      />
+      <img
+        v-else-if="searchTypeData === '近期活動'"
+        src="@/assets/images/event-icon.png"
+        alt="event-icon"
+      />
     </div>
-    <div class="card_section_content">
-      <Card v-for="obj in data" :key="obj.ID" :item="obj"></Card>
+    <div class="card_section_content" v-if="paginatedData">
+      <Card v-for="obj in paginatedData" :key="obj.ID" :item="obj"></Card>
     </div>
-    <button type="button" class="card_section_morePlaceBtn">
-      看更多熱們景點
-    </button>
+    <router-link
+      v-if="searchTypeData && paginatedData.length > 9"
+      :to="{ name: 'MoreResult' }"
+    >
+      <button type="button" class="card_section_morePlaceBtn">
+        看更多{{ searchTypeData }}
+      </button>
+    </router-link>
   </section>
-  <!-- {{ test }} -->
 </template>
 
 <script>
-// import JsSHA from 'jssha';
 export default {
-  props: ['data'],
   data() {
     return {
-      test: [],
-      filteredTypeData: '',
-      filteredData: ''
+      searchTypeData: '',
+      paginatedData: null
     };
   },
-  // computed: {
-  //   config: { headers: this.GetAuthorizationHeader() },
-  //   defaultPlaceUrl:
-  //     'https://ptx.transportdata.tw/MOTC/v2/Tourism/ScenicSpot/Taipei?$top=6&$format=JSON',
-  //   defaultFoodUrl:
-  //     'https://ptx.transportdata.tw/MOTC/v2/Tourism/Restaurant/Taipei?$top=6&$format=JSON',
-  //   defaultEventUrl:
-  //     'https://ptx.transportdata.tw/MOTC/v2/Tourism/Activity/Taipei?$top=6&$format=JSON',
-  //   placeUrl() {
-  //     if (this.filteredData === '') return this.defaultPlaceUrl;
-  //     return `https://ptx.transportdata.tw/MOTC/v2/Tourism/${this.filteredTypeData}/${this.filteredData}?$top=100&$format=JSON`;
-  //   },
-  //   foodUrl() {
-  //     if (this.filteredData === '') return this.defaultFoodUrl;
-  //     return `https://ptx.transportdata.tw/MOTC/v2/Tourism/${this.filteredTypeData}/${this.filteredData}?$top=100&$format=JSON`;
-  //   },
-  //   eventUrl() {
-  //     if (this.filteredData === '') return this.defaultEventUrl;
-  //     return `https://ptx.transportdata.tw/MOTC/v2/Tourism/${this.filteredTypeData}/${this.filteredData}?$top=100&$format=JSON`;
-  //   }
-  // },
-  // methods: {
-  //   GetAuthorizationHeader() {
-  //     const AppID = '096409078e0c483f87d2ae7551b214ea';
-  //     const AppKey = '4s6NU76FhxsKZGCH06RzkVnXoSk';
-
-  //     const GMTString = new Date().toGMTString();
-  //     const ShaObj = new JsSHA('SHA-1', 'TEXT');
-  //     ShaObj.setHMACKey(AppKey, 'TEXT');
-  //     ShaObj.update('x-date: ' + GMTString);
-  //     const HMAC = ShaObj.getHMAC('B64');
-  //     const Authorization =
-  //       'hmac username="' +
-  //       AppID +
-  //       '", algorithm="hmac-sha1", headers="x-date", signature="' +
-  //       HMAC +
-  //       '"';
-  //     return {
-  //       Authorization: Authorization,
-  //       'X-Date': GMTString
-  //     };
-  //   }
-  // }
   created() {
-    // 接收篩選資料
-    this.emitter.on('filteredData', (data) => {
-      this.filteredTypeData = data.selectedType;
-      console.log('this.filteredTypeData', this.filteredTypeData);
-
-      this.filteredData = data.place;
-      console.log('this.filteredData', this.filteredData);
+    // 接收分頁資料
+    this.emitter.on('paginatedData', (data) => {
+      this.paginatedData = data.paginatedData;
+      this.searchTypeData = data.searchTypeData;
+      console.log(
+        'emit on paginatedData ',
+        this.paginatedData,
+        this.searchTypeData
+      );
     });
   }
 };
@@ -83,7 +59,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/assets/scss/popularSection.scss';
 // .card_section {
-//   padding: 55px 7%;
+//   padding: 55px 7.09%;
 //   &:nth-of-type(2) {
 //     background-color: $color-secondary;
 //   }

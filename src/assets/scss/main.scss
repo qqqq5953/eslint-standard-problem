@@ -13,6 +13,12 @@ $color-dark-50: rgba(51, 51, 51, 1);
 $color-white-50: rgba(254, 254, 254, 1);
 $color-danger: rgba(203, 69, 57, 1);
 
+@mixin desktop {
+  @media (max-width: 1440px) {
+    @content;
+  }
+}
+
 @mixin pad {
   @media (max-width: 768px) {
     @content;

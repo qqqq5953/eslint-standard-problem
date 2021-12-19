@@ -1,5 +1,5 @@
 .card_section {
-  padding: 55px 7%;
+  padding: 55px 7.09%;
   &:nth-of-type(2) {
     background-color: $color-secondary;
   }
@@ -18,21 +18,22 @@
   font-size: $font-size-xxl;
   color: $color-primary;
   margin-bottom: 70px;
+  display: flex;
+
+  img {
+    margin-left: 24px;
+  }
 
   @include mobile {
     font-size: $font-size-md;
     text-align: center;
     margin-bottom: 30px;
   }
-
-  .fas {
-    margin-left: 24px;
-  }
 }
 
 .card_section_content {
   display: flex;
-  justify-content: space-between;
+  // justify-content: space-between;
   flex-wrap: wrap;
 }
 

@@ -63,7 +63,7 @@
           </li>
         </template>
       </ul>
-      <router-link :to="{ name: 'filterResult' }">
+      <router-link :to="{ name: 'SearchResult' }">
         <input
           type="button"
           class="banner_filterForm_searchBtn"
@@ -81,6 +81,8 @@
 </template>
 
 <script>
+import JsSHA from 'jssha';
+
 export default {
   props: ['getMask'],
   data() {
@@ -154,10 +156,113 @@ export default {
       handler: {
         click: [this.closeMask, this.sendFilterData],
         'keyup.enter': [this.closeMask, this.sendFilterData]
-      }
+      },
+      // popularSection測試
+      filteredTypeData: '',
+      filteredCityData: '',
+      filteredData: [],
+      config: { headers: this.GetAuthorizationHeader() }
     };
   },
+  computed: {
+    placeUrl() {
+      return `https://ptx.transportdata.tw/MOTC/v2/Tourism/${this.filteredTypeData}/${this.filteredCityData}?$top=50&$format=JSON`;
+    },
+    foodUrl() {
+      return `https://ptx.transportdata.tw/MOTC/v2/Tourism/${this.filteredTypeData}/${this.filteredCityData}?$top=50&$format=JSON`;
+    },
+    eventUrl() {
+      return `https://ptx.transportdata.tw/MOTC/v2/Tourism/${this.filteredTypeData}/${this.filteredCityData}?$top=50&$format=JSON`;
+    }
+  },
+  watch: {
+    filteredCityData() {
+      if (this.filteredTypeData === 'ScenicSpot') {
+        this.getPlaceData();
+        console.log('開始抓資料');
+      }
+      if (this.filteredTypeData === 'Restaurant') {
+        this.getFoodData();
+        console.log('開始抓資料');
+      }
+      if (this.filteredTypeData === 'Activity') {
+        this.getEventData();
+        console.log('開始抓資料');
+      }
+    }
+  },
   methods: {
+    async getPlaceData() {
+      try {
+        const placeResponse = await this.axios.get(this.placeUrl, this.config);
+        this.filteredData = placeResponse.data;
+        this.emitter.emit('filteredData', {
+          filteredData: this.filteredData,
+          filteredTypeData: '熱門景點'
+        });
+        console.log('placeData', this.filteredData);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getFoodData() {
+      try {
+        const foodResponse = await this.axios.get(this.foodUrl, this.config);
+        this.filteredData = foodResponse.data;
+        this.emitter.emit('filteredData', {
+          filteredData: this.filteredData,
+          filteredTypeData: '熱門美食'
+        });
+        console.log('foodData', this.filteredData);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getEventData() {
+      try {
+        const eventResponse = await this.axios.get(this.eventUrl, this.config);
+        this.filteredData = eventResponse.data;
+        this.emitter.emit('filteredData', {
+          filteredData: this.filteredData,
+          filteredTypeData: '近期活動'
+        });
+        console.log('eventData', this.filteredData);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    GetAuthorizationHeader() {
+      const AppID = '096409078e0c483f87d2ae7551b214ea';
+      const AppKey = '4s6NU76FhxsKZGCH06RzkVnXoSk';
+
+      const GMTString = new Date().toGMTString();
+      const ShaObj = new JsSHA('SHA-1', 'TEXT');
+      ShaObj.setHMACKey(AppKey, 'TEXT');
+      ShaObj.update('x-date: ' + GMTString);
+      const HMAC = ShaObj.getHMAC('B64');
+      const Authorization =
+        'hmac username="' +
+        AppID +
+        '", algorithm="hmac-sha1", headers="x-date", signature="' +
+        HMAC +
+        '"';
+      return {
+        Authorization: Authorization,
+        'X-Date': GMTString
+      };
+    },
+    sendFilterData() {
+      console.log('selectedType', this.selectedType.value);
+      console.log('city', this.selectedCityValue);
+
+      this.filteredTypeData = this.selectedType.value;
+      this.filteredCityData = this.selectedCityValue;
+
+      this.resetFilter();
+
+      // this.changeSearchSectionStatus();
+    },
+    // 原來的
     selectPopularType(type) {
       this.selectedType = type;
 
@@ -205,15 +310,6 @@ export default {
         }
       }
     },
-    sendFilterData() {
-      this.emitter.emit('filteredData', {
-        selectedType: this.selectedType.value,
-        place: this.selectedCityValue
-      });
-
-      this.changeSearchSectionStatus();
-      this.resetFilter();
-    },
     resetFilter() {
       this.selectedCityValue = '';
       this.regionData.forEach((regionItem) => {
@@ -224,9 +320,6 @@ export default {
     closeMask() {
       this.$emit('closeMask');
       console.log('closeMask');
-    },
-    changeSearchSectionStatus() {
-      this.emitter.emit('searchStatus', true);
     },
     dropdownListToggle(event) {
       console.log('------------------------------------------');
@@ -285,6 +378,10 @@ export default {
           });
         });
       });
+    },
+    // 可刪除
+    changeSearchSectionStatus() {
+      this.emitter.emit('searchStatus', true);
     }
   }
 };

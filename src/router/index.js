@@ -8,14 +8,13 @@ const routes = [
     children: [
       {
         path: 'searchResult',
-        name: 'searchResult',
-        component: () => import('../views/SearchResult.vue')
+        name: 'SearchResult',
+        component: () => import('../components/PopularSection.vue')
       },
       {
-        path: 'filterResult',
-        name: 'filterResult',
-        // component: () => import('../components/FilterSection.vue')
-        component: () => import('../views/FilterResult.vue')
+        path: 'moreResult',
+        name: 'MoreResult',
+        component: () => import('../components/PopularSection.vue')
       }
     ]
   },

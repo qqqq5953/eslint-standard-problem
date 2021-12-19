@@ -10,20 +10,20 @@ import '@/assets/scss/reset.scss';
 
 import HeaderSection from '@/components/HeaderSection.vue';
 import FilterSection from '@/components/FilterSection.vue';
-import SearchSection from '@/components/SearchSection.vue';
+// import SearchSection from '@/components/SearchSection.vue';
 import PopularSection from '@/components/PopularSection.vue';
 import Card from '@/components/Card.vue';
-import FilterResult from '@/views/FilterResult.vue';
-import SearchResult from '@/views/SearchResult.vue';
+import MoreResult from '@/components/MoreResult.vue';
+import Pagination from '@/components/Pagination.vue';
 
 const emitter = mitt();
 const app = createApp(App).use(VueAxios, axios).use(router);
 app.config.globalProperties.emitter = emitter;
 app.component('HeaderSection', HeaderSection);
 app.component('FilterSection', FilterSection);
-app.component('SearchSection', SearchSection);
+// app.component('SearchSection', SearchSection);
 app.component('PopularSection', PopularSection);
 app.component('Card', Card);
-app.component('SearchResult', SearchResult);
-app.component('FilterResult', FilterResult);
+app.component('MoreResult', MoreResult);
+app.component('Pagination', Pagination);
 app.mount('#app');

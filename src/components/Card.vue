@@ -57,6 +57,10 @@ export default {
 //   display: flex;
 //   flex-direction: column;
 
+//   &:not(&:nth-of-type(3n)) {
+//     margin-right: 70px;
+//   }
+
 //   &:hover .card_image > .card_description {
 //     border-radius: 14px 14px 0 0;
 //     opacity: 1;

@@ -1,16 +1,18 @@
 <template>
   <div class="wrap">
-    <HeaderSection
+    <!-- <HeaderSection
       :place="placeData"
       :food="foodData"
       :event="eventData"
       :allData="allData"
-    ></HeaderSection>
+    ></HeaderSection> -->
+    <HeaderSection></HeaderSection>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+// 以下都暫時用不到
 import JsSHA from 'jssha';
 
 export default {
@@ -96,27 +98,27 @@ export default {
         console.log(error);
       }
     },
-    async getAllData() {
-      try {
-        const urlArr = [this.placeUrl, this.foodUrl, this.eventUrl];
-        const responseArr = [];
-        for (let i = 0; i < urlArr.length; i++) {
-          const response = await this.axios.get(urlArr[i], this.config);
-          responseArr.push(response.data);
-        }
-        const [placeData, foodData, eventData] = responseArr;
-        this.placeData = placeData;
-        this.foodData = foodData;
-        this.eventData = eventData;
-        this.allData = [...placeData, ...foodData, ...eventData];
-        console.log('this.placeData', this.placeData);
-        console.log('this.foodData', this.foodData);
-        console.log('this.eventData', this.eventData);
-        console.log('this.allData', this.allData);
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    // async getAllData() {
+    //   try {
+    //     const urlArr = [this.placeUrl, this.foodUrl, this.eventUrl];
+    //     const responseArr = [];
+    //     for (let i = 0; i < urlArr.length; i++) {
+    //       const response = await this.axios.get(urlArr[i], this.config);
+    //       responseArr.push(response.data);
+    //     }
+    //     const [placeData, foodData, eventData] = responseArr;
+    //     this.placeData = placeData;
+    //     this.foodData = foodData;
+    //     this.eventData = eventData;
+    //     this.allData = [...placeData, ...foodData, ...eventData];
+    //     console.log('this.placeData', this.placeData);
+    //     console.log('this.foodData', this.foodData);
+    //     console.log('this.eventData', this.eventData);
+    //     console.log('this.allData', this.allData);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
     GetAuthorizationHeader() {
       const AppID = '096409078e0c483f87d2ae7551b214ea';
       const AppKey = '4s6NU76FhxsKZGCH06RzkVnXoSk';
@@ -139,23 +141,19 @@ export default {
     }
   },
   created() {
-    this.getAllData();
-
+    // this.getAllData();
     // // 篩選後遮罩控制
     // this.emitter.on('activate-loading', (data) => {
     //   console.log('遮罩是否打開?', data);
     //   this.maskStatus = data;
     // });
-
     // // 接收篩選資料
     // this.emitter.on('filteredData', (data) => {
     //   this.filteredTypeData = data.selectedType;
     //   console.log('this.filteredTypeData', this.filteredTypeData);
-
     //   this.filteredData = data.place;
     //   console.log('this.filteredData', this.filteredData);
     // });
-
     // // 搜尋後區域控制
     // this.emitter.on('searchStatus', (data) => {
     //   this.searchStatus = data;

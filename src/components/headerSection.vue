@@ -7,7 +7,7 @@
           <span class="websiteName">TaiFun旅遊網</span>
         </a> -->
         <router-link :to="{ name: 'HomeTest' }" class="logo">
-          <img src="@/assets/logo.png" alt="logo" />
+          <img src="@/assets/images/logo.png" alt="logo" />
           <span class="websiteName">TaiFun旅遊網</span>
         </router-link>
       </h1>
@@ -18,6 +18,14 @@
       <h3 class="banner_subtitle">景點、活動、美食</h3>
       <div class="banner_search">
         <div class="banner_searchBar">
+          <!-- <router-link @keyup.enter="searchBtn" :to="{ name: 'searchResult' }">
+            <input
+              type="text"
+              placeholder="請輸入關鍵字"
+              v-model.trim="search"
+            />
+            <i class="fas fa-lg fa-search"></i>
+          </router-link> -->
           <input
             type="text"
             placeholder="請輸入關鍵字"
@@ -37,12 +45,15 @@
           <span class="banner_filterText">篩選</span>
         </button>
       </div>
-      <input
-        type="button"
-        class="banner_searchBtn"
-        @click="searchBtn"
-        value="搜尋"
-      />
+      <router-link class="banner_searchBtn" :to="{ name: 'SearchResult' }">
+        <input
+          type="button"
+          class="banner_searchBtn"
+          @click="searchBtn"
+          value="搜尋"
+        />
+      </router-link>
+
       <FilterSection
         :get-mask="hasMask"
         @close-mask="changeMaskStatus"
@@ -52,32 +63,77 @@
 </template>
 
 <script>
+import JsSHA from 'jssha';
+
 export default {
-  props: ['allData'],
+  // props: ['allData'],
   data() {
     return {
       hasMask: false,
       temp: '',
-      search: ''
+      search: '',
+      allData: [],
+      placeUrl:
+        'https://ptx.transportdata.tw/MOTC/v2/Tourism/ScenicSpot/Taipei?$top=6&$format=JSON',
+      foodUrl:
+        'https://ptx.transportdata.tw/MOTC/v2/Tourism/Restaurant/Taipei?$top=6&$format=JSON',
+      eventUrl:
+        'https://ptx.transportdata.tw/MOTC/v2/Tourism/Activity/Taipei?$top=6&$format=JSON'
     };
   },
   methods: {
-    searchBtn() {
-      if (this.search === '') return;
-
+    async getAllData() {
+      try {
+        const urlArr = [this.placeUrl, this.foodUrl, this.eventUrl];
+        const responseArr = [];
+        for (let i = 0; i < urlArr.length; i++) {
+          const response = await this.axios.get(urlArr[i], this.config);
+          responseArr.push(...response.data);
+        }
+        this.allData = [...responseArr];
+        // console.log('responseArr', responseArr);
+        // console.log('this.allData', this.allData);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async searchBtn() {
+      await this.getAllData();
       console.log('this.allData', this.allData);
+
+      if (this.search === '') return;
       const searchData = this.allData.filter((data) => {
         return data.Name.match(this.search);
       });
 
-      this.emitter.emit('searchData', searchData);
-      this.emitter.emit('searchStatus', false);
+      this.emitter.emit('searchData', { searchData, title: '搜尋結果' });
+      // this.emitter.emit('searchStatus', false);
 
       this.search = '';
     },
     changeMaskStatus() {
       this.hasMask = !this.hasMask;
       this.emitter.emit('activate-loading', this.hasMask);
+    },
+    GetAuthorizationHeader() {
+      const AppID = '096409078e0c483f87d2ae7551b214ea';
+      const AppKey = '4s6NU76FhxsKZGCH06RzkVnXoSk';
+
+      const GMTString = new Date().toGMTString();
+      const ShaObj = new JsSHA('SHA-1', 'TEXT');
+      ShaObj.setHMACKey(AppKey, 'TEXT');
+      ShaObj.update('x-date: ' + GMTString);
+      const HMAC = ShaObj.getHMAC('B64');
+      const Authorization =
+        'hmac username="' +
+        AppID +
+        '", algorithm="hmac-sha1", headers="x-date", signature="' +
+        HMAC +
+        '"';
+      return {
+        Authorization: Authorization,
+        'X-Date': GMTString
+      };
     }
   }
 };
