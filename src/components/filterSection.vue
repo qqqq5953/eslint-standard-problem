@@ -276,33 +276,27 @@ export default {
     },
     selectRegion(region, cityName, cityValue) {
       this.$refs.filterBtn.focus();
-      console.log('this.$refs.filterBtn', this.$refs.filterBtn);
 
       this.selectedCityValue = cityValue;
       switch (region) {
         case '北部': {
           this.regionData[0].selectedCity = cityName;
-          console.log(`城市中文名：${this.regionData[0].selectedCity}`);
           break;
         }
         case '中部': {
           this.regionData[1].selectedCity = cityName;
-          console.log(`城市中文名：${this.regionData[1].selectedCity}`);
           break;
         }
         case '南部': {
           this.regionData[2].selectedCity = cityName;
-          console.log(`城市中文名：${this.regionData[2].selectedCity}`);
           break;
         }
         case '東部': {
           this.regionData[3].selectedCity = cityName;
-          console.log(`城市中文名：${this.regionData[3].selectedCity}`);
           break;
         }
         case '離島': {
           this.regionData[4].selectedCity = cityName;
-          console.log(`城市中文名：${this.regionData[4].selectedCity}`);
           break;
         }
         default: {
@@ -319,7 +313,6 @@ export default {
     },
     closeMask() {
       this.$emit('closeMask');
-      console.log('closeMask');
     },
     dropdownListToggle(event) {
       console.log('------------------------------------------');
@@ -365,7 +358,6 @@ export default {
     dropdownListStatus(withoutText, withText) {
       withoutText.forEach((noTextItem) => {
         noTextItem.addEventListener('click', function (event) {
-          console.log('event.target.nodeName', event.target.nodeName);
           if (event.target.nodeName !== 'LI') return;
 
           // 如點選尚未選擇的選項，則將所有已選內容的選單移除 selectedItem 標記，並改成"選擇縣市"
@@ -381,7 +373,7 @@ export default {
     },
     // 可刪除
     changeSearchSectionStatus() {
-      this.emitter.emit('searchStatus', true);
+      // this.emitter.emit('searchStatus', true);
     }
   }
 };

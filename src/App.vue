@@ -6,7 +6,7 @@
       :event="eventData"
       :allData="allData"
     ></HeaderSection> -->
-    <HeaderSection></HeaderSection>
+    <!-- <HeaderSection></HeaderSection> -->
     <router-view></router-view>
   </div>
 </template>
@@ -76,24 +76,36 @@ export default {
   methods: {
     async getPlaceData() {
       try {
-        const placeResponse = await this.axios.get(this.placeUrl, this.config);
+        const placeResponse = await this.axios.get(
+          this.defaultPlaceUrl,
+          this.config
+        );
         this.placeData = placeResponse.data;
+        console.log('預設資料 placeData', this.placeData);
       } catch (error) {
         console.log(error);
       }
     },
     async getFoodData() {
       try {
-        const foodResponse = await this.axios.get(this.foodUrl, this.config);
+        const foodResponse = await this.axios.get(
+          this.defaultFoodUrl,
+          this.config
+        );
         this.foodData = foodResponse.data;
+        console.log('預設資料 foodData', this.foodData);
       } catch (error) {
         console.log(error);
       }
     },
     async getEventData() {
       try {
-        const eventResponse = await this.axios.get(this.eventUrl, this.config);
+        const eventResponse = await this.axios.get(
+          this.defaultEventUrl,
+          this.config
+        );
         this.eventData = eventResponse.data;
+        console.log('預設資料 eventData', this.eventData);
       } catch (error) {
         console.log(error);
       }
@@ -141,6 +153,10 @@ export default {
     }
   },
   created() {
+    // 取得預設資料
+    // this.getPlaceData();
+    // this.getFoodData();
+    // this.getEventData();
     // this.getAllData();
     // // 篩選後遮罩控制
     // this.emitter.on('activate-loading', (data) => {

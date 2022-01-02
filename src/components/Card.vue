@@ -18,16 +18,24 @@
           <i class="fas fa-map-marker-alt"></i>
           <span>{{ item.City }}</span>
         </div>
-        <h4 class="card_header_title">{{ item.Name }}</h4>
+        <h4 class="card_header_title">
+          {{
+            item.ScenicSpotName
+              ? item.ScenicSpotName
+              : item.RestaurantName
+              ? item.RestaurantName
+              : item.ActivityName
+          }}
+        </h4>
       </div>
       <div class="card_openTime">
         <h5>開放時間：</h5>
         <div class="card_openTime_details">{{ item.OpenTime }}</div>
       </div>
     </div>
-    <button type="button" class="card_moreInfoBtn" @click="toContentPage">
-      查看詳情
-    </button>
+    <router-link :to="{ name: 'CardDetail' }" @click="toContentPage">
+      <button type="button" class="card_moreInfoBtn">查看詳情</button>
+    </router-link>
   </div>
 </template>
 
@@ -37,7 +45,8 @@ export default {
   methods: {
     toContentPage() {
       // 傳送到內容頁
-      console.log('click', this.item);
+      console.log('Card 發送', this.item);
+      this.emitter.emit('cardDetail', this.item);
     }
   }
 };

@@ -2,10 +2,7 @@
   <header class="header">
     <nav class="nav">
       <h1>
-        <!-- <a href="#" class="logo">
-          <img src="@/assets/logo.png" alt="logo" />
-          <span class="websiteName">TaiFun旅遊網</span>
-        </a> -->
+        <!--改成 :to="{ name: 'RouteTest', params: { id: 'routetest' } }"-->
         <router-link :to="{ name: 'HomeTest' }" class="logo">
           <img src="@/assets/images/logo.png" alt="logo" />
           <span class="websiteName">TaiFun旅遊網</span>
@@ -26,12 +23,8 @@
             />
             <i class="fas fa-lg fa-search"></i>
           </router-link> -->
-          <input
-            type="text"
-            placeholder="請輸入關鍵字"
-            v-model.trim="search"
-            @keyup.enter="searchBtn"
-          />
+          <!-- @keyup.enter="searchBtn" -->
+          <input type="text" placeholder="請輸入關鍵字" v-model.trim="search" />
           <i class="fas fa-lg fa-search"></i>
         </div>
         <button
@@ -45,12 +38,13 @@
           <span class="banner_filterText">篩選</span>
         </button>
       </div>
-      <router-link class="banner_searchBtn" :to="{ name: 'SearchResult' }">
+      <router-link :to="{ name: 'SearchResult' }">
         <input
           type="button"
           class="banner_searchBtn"
           @click="searchBtn"
           value="搜尋"
+          :disabled="!this.search"
         />
       </router-link>
 
@@ -98,12 +92,18 @@ export default {
       }
     },
     async searchBtn() {
+      if (this.search === '') return;
+
       await this.getAllData();
       console.log('this.allData', this.allData);
 
-      if (this.search === '') return;
       const searchData = this.allData.filter((data) => {
-        return data.Name.match(this.search);
+        const name = data.ScenicSpotName
+          ? data.ScenicSpotName
+          : data.RestaurantName
+          ? data.RestaurantName
+          : data.ActivityName;
+        return name.match(this.search);
       });
 
       this.emitter.emit('searchData', { searchData, title: '搜尋結果' });

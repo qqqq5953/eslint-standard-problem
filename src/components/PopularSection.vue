@@ -1,7 +1,14 @@
 <template>
+  <!-- <HeaderSection></HeaderSection> -->
+  <Pagination
+    v-if="searchData"
+    :current-page="currentPage"
+    :total-pages="totalPages"
+    @page-change="onPageChange"
+  ></Pagination>
   <section class="card_section">
     <div class="card_section_title">
-      <!-- <slot name="card_section_title_text"></slot> -->
+      <slot v-if="!searchTypeData" name="card_section_title_text"></slot>
       <div>{{ searchTypeData }}</div>
       <img
         v-if="searchTypeData === '熱門景點'"
@@ -19,15 +26,27 @@
         alt="event-icon"
       />
     </div>
-    <div class="card_section_content" v-if="paginatedData">
+    <div class="card_section_content">
       <Card v-for="obj in paginatedData" :key="obj.ID" :item="obj"></Card>
+      <!-- <Card
+        v-for="obj in paginatedData"
+        :key="obj.ID"
+        :item="obj"
+      ></Card> -->
+      <!-- v-show="!paginatedData.length" -->
+      <!-- <Card
+        v-for="obj in data"
+        :key="obj.ID"
+        :item="obj"
+      ></Card> -->
     </div>
     <router-link
-      v-if="searchTypeData && paginatedData.length > 9"
       :to="{ name: 'MoreResult' }"
+      v-if="defaultType"
+      @click="moreResult"
     >
       <button type="button" class="card_section_morePlaceBtn">
-        看更多{{ searchTypeData }}
+        看更多{{ defaultType }}
       </button>
     </router-link>
   </section>
@@ -35,23 +54,101 @@
 
 <script>
 export default {
+  props: ['data', 'defaultType'],
   data() {
     return {
+      searchData: null,
       searchTypeData: '',
-      paginatedData: null
+      paginatedData: null,
+      // 分頁資訊
+      currentPage: 1,
+      cardPerPage: 9,
+      totalPages: ''
     };
   },
+  methods: {
+    moreResult() {
+      console.log('moreResult 發射', this.defaultType);
+      this.emitter.emit('more-result', this.defaultType);
+    },
+    setPageButton() {
+      this.totalPages = Math.ceil(this.searchData.length / this.cardPerPage);
+    },
+    setPageData(data) {
+      const page = this.currentPage;
+      const perPage = this.cardPerPage;
+      const start = page * perPage - perPage;
+      const end = page * perPage;
+      return data.slice(start, end);
+    },
+    onPageChange(page) {
+      console.log('pageChange', page);
+      this.currentPage = page;
+    }
+  },
+  watch: {
+    data() {
+      this.paginatedData = this.data;
+    },
+    currentPage() {
+      // 當所在頁面變動時，重新傳送資料給 PopularSection.vue
+      console.log('currentPage 有變動');
+      this.paginatedData = this.setPageData(this.searchData);
+    },
+    searchData() {
+      console.log('searchData 有變動');
+
+      // 重設起始頁面
+      this.currentPage = 1;
+
+      // 設置分頁按鈕
+      this.setPageButton();
+
+      // 當篩選或搜尋資料完成時，傳送資料給 PopularSection.vue
+      this.paginatedData = this.setPageData(this.searchData);
+    }
+  },
   created() {
-    // 接收分頁資料
-    this.emitter.on('paginatedData', (data) => {
-      this.paginatedData = data.paginatedData;
-      this.searchTypeData = data.searchTypeData;
-      console.log(
-        'emit on paginatedData ',
-        this.paginatedData,
-        this.searchTypeData
-      );
+    console.log('PopulatSection created');
+  },
+  mounted() {
+    console.log('PopularSection mounted');
+    // 接收篩選資料
+    this.emitter.on('filteredData', (data) => {
+      this.searchData = data.filteredData;
+      this.searchTypeData = data.filteredTypeData;
+      console.log('emit on searchData', this.searchData);
+      console.log('emit on searchTypeData', this.searchTypeData);
     });
+
+    // 接收搜尋資料
+    this.emitter.on('searchData', (data) => {
+      this.searchData = data.searchData;
+      this.searchTypeData = data.title;
+      console.log('emit on searchData 的 searchData', this.searchData);
+      console.log('emit on searchData 的 searchTypeData', this.searchTypeData);
+    });
+  },
+  updated() {
+    console.log('PopularSection updated');
+  },
+  beforeUnmount() {
+    console.log('PopularSection beforeUnmont');
+    this.emitter.off('filteredData', (data) => {
+      this.searchData = data.filteredData;
+      this.searchTypeData = data.filteredTypeData;
+      console.log('emit on searchData', this.searchData);
+      console.log('emit on searchTypeData', this.searchTypeData);
+    });
+    this.emitter.off('searchData', (data) => {
+      this.searchData = data.searchData;
+      this.searchTypeData = data.title;
+      console.log('emit on searchData 的 searchData', this.searchData);
+      console.log('emit on searchData 的 searchTypeData', this.searchTypeData);
+    });
+  },
+  unmounted() {
+    console.log('PopularSection unmonted');
   }
 };
 </script>
