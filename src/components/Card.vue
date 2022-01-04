@@ -44,9 +44,11 @@ export default {
   props: ['item'],
   methods: {
     toContentPage() {
-      // 傳送到內容頁
-      console.log('Card 發送', this.item);
-      this.emitter.emit('cardDetail', this.item);
+      console.log('card 發送');
+
+      // 傳送到 CardDetails.vue (用 localStorage)
+      const cardItem = JSON.stringify({ ...this.item });
+      localStorage.setItem('passToCardDetails', cardItem);
     }
   }
 };

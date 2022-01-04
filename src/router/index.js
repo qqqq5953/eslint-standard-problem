@@ -33,7 +33,7 @@ const routes = [
   {
     path: '/moreResult',
     name: 'MoreResult',
-    component: () => import('../components/MoreResult.vue')
+    component: () => import('../views/MoreResult.vue')
   },
   {
     path: '/cardDetail',

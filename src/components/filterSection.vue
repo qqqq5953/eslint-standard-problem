@@ -375,6 +375,10 @@ export default {
     changeSearchSectionStatus() {
       // this.emitter.emit('searchStatus', true);
     }
+  },
+  beforeUnmount() {
+    console.log('FilterPage beforeUnmont');
+    this.emitter.off('filteredData');
   }
 };
 </script>

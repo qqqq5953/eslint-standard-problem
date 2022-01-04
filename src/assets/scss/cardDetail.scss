@@ -468,12 +468,13 @@
   }
 }
 
+// 地圖
 .custom-popup-red .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
   background: rgba(255, 255, 255, 0.3);
   // background:transparent;
   box-shadow: none;
-  color: #cb2b3e;
+  color: #cb2b3e !important;
   font-size: $font-size-xl;
   font-weight: bold;
 }

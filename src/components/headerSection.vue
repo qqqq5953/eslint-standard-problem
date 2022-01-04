@@ -1,14 +1,6 @@
 <template>
   <header class="header">
-    <nav class="nav">
-      <h1>
-        <!--改成 :to="{ name: 'RouteTest', params: { id: 'routetest' } }"-->
-        <router-link :to="{ name: 'HomeTest' }" class="logo">
-          <img src="@/assets/images/logo.png" alt="logo" />
-          <span class="websiteName">TaiFun旅遊網</span>
-        </router-link>
-      </h1>
-    </nav>
+    <Navbar></Navbar>
 
     <section class="banner">
       <h2 class="banner_title">尋找台灣</h2>

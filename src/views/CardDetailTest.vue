@@ -1,68 +1,117 @@
 <template>
-  card detail page
-  <div class="content">
-    <section class="intro_section">
-      <h3>介紹</h3>
-      <article>{{ defaultCardItem.DescriptionDetail }}</article>
-    </section>
-
-    <section class="map_section">
-      <h3>景點地圖</h3>
-      <p>點擊以下按鈕搜尋</p>
-
-      <nav class="search_by_type">
-        <a
-          href="#"
-          class="search_by_type_btn"
-          @click.capture.prevent="getNearByPlace(foodData, $event)"
-          data-click="0"
-        >
-          <div class="search_by_type_icon">
-            <i class="fas fa-2x fa-utensils"></i>
+  <div class="wrap">
+    <header>
+      <Navbar></Navbar>
+      <section class="info_section outline-b">
+        <h2>{{ defaultCardItem[this.Name] }}</h2>
+        <p class="badge">
+          {{
+            defaultCardItem.Class1
+              ? defaultCardItem.Class1
+              : defaultCardItem.Class2
+              ? defaultCardItem.Class2
+              : '其他類'
+          }}
+        </p>
+        <div class="info_content outline-b">
+          <div class="info_img outline" style="">
+            <img :src="defaultCardItem.Picture.PictureUrl1" alt="" />
           </div>
-          <span>搜尋附近餐廳</span>
-        </a>
-
-        <a
-          href="#"
-          class="search_by_type_btn"
-          @click.capture.prevent="getNearByPlace(hotelData, $event)"
-        >
-          <div class="search_by_type_icon">
-            <i class="fas fa-2x fa-bed"></i>
+          <div class="info_details">
+            <h3>資訊</h3>
+            <div>
+              <h4>電話：</h4>
+              <div class="info_details_phone">
+                <input
+                  id="phoneNumber"
+                  type="text"
+                  :value="defaultCardItem.Phone"
+                />
+                <a href="#" @click="copyToClipBoard"
+                  ><i class="far fa-copy"></i
+                ></a>
+              </div>
+            </div>
+            <div class="info_details_address">
+              <h4>地址：</h4>
+              <div>
+                <span>{{ defaultCardItem.Address }}</span>
+                <a href="#mapid"><i class="fas fa-map-marked-alt"></i></a>
+              </div>
+            </div>
+            <div class="info_details_openTime">
+              <h4>開放時間：</h4>
+              <div>{{ defaultCardItem.OpenTime }}</div>
+            </div>
           </div>
-          <span>搜尋附近住宿</span>
-        </a>
-
-        <a
-          href="#"
-          class="search_by_type_btn"
-          @click.capture.prevent="getNearByPlace(eventData, $event)"
-        >
-          <div class="search_by_type_icon">
-            <i class="fas fa-2x fa-star-half-alt"></i>
-          </div>
-          <span>搜尋附近活動</span>
-        </a>
-      </nav>
-
-      <!--地圖-->
-      <section class="map_section_details" style="outline: 1px solid red">
-        <div
-          id="mapid"
-          class="map_default"
-          style="width: 755px; height: 487px"
-        ></div>
-        <a
-          href="#officialSite_section"
-          class="noDataWarning"
-          v-if="noDataWarning"
-          @click="showTable"
-          >查無資料!<br />查看官網活動 <i class="fas fa-chevron-down"></i
-        ></a>
-        <Card :item="cardItem" v-if="isCardShown"></Card>
+        </div>
       </section>
-    </section>
+    </header>
+
+    <div class="content">
+      <section class="intro_section">
+        <h3>介紹</h3>
+        <article>{{ defaultCardItem.DescriptionDetail }}</article>
+      </section>
+
+      <section class="map_section">
+        <h3>景點地圖</h3>
+        <p>點擊以下按鈕搜尋</p>
+
+        <nav class="search_by_type">
+          <a
+            href="#"
+            class="search_by_type_btn"
+            @click.capture.prevent="getNearByPlace(foodData, $event)"
+            data-click="0"
+          >
+            <div class="search_by_type_icon">
+              <i class="fas fa-2x fa-utensils"></i>
+            </div>
+            <span>搜尋附近餐廳</span>
+          </a>
+
+          <a
+            href="#"
+            class="search_by_type_btn"
+            @click.capture.prevent="getNearByPlace(hotelData, $event)"
+          >
+            <div class="search_by_type_icon">
+              <i class="fas fa-2x fa-bed"></i>
+            </div>
+            <span>搜尋附近住宿</span>
+          </a>
+
+          <a
+            href="#"
+            class="search_by_type_btn"
+            @click.capture.prevent="getNearByPlace(eventData, $event)"
+          >
+            <div class="search_by_type_icon">
+              <i class="fas fa-2x fa-star-half-alt"></i>
+            </div>
+            <span>搜尋附近活動</span>
+          </a>
+        </nav>
+
+        <!--地圖-->
+        <section class="map_section_details" style="outline: 1px solid red">
+          <div
+            id="mapid"
+            class="map_default"
+            style="width: 755px; height: 487px"
+          ></div>
+          <a
+            href="#officialSite_section"
+            class="noDataWarning"
+            v-if="noDataWarning"
+            @click="showTable"
+            >查無資料!<br />查看官網活動 <i class="fas fa-chevron-down"></i
+          ></a>
+          <Card :item="cardItem" v-if="isCardShown"></Card>
+        </section>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -89,35 +138,37 @@ export default {
       defaultMarkerPopup: {},
       mymap: {},
       // 卡片資料
+      Name: '',
       cardItem: {},
-      defaultCardItem: {
-        ID: 'C1_315081600H_000138',
-        ScenicSpotID: 'C1_315081600H_000138',
-        Name: '錢來也雜貨店',
-        ScenicSpotName: '錢來也雜貨店',
-        DescriptionDetail:
-          '錢來也雜貨店興建於西元1952年，為傳統斜瓦平房的老建築。早期做為台鹽鹽工福利社，提供購買日常用品及育樂中心，直到北門鹽場停止鹽業生產工作，福利社也正式劃下句點。西元2003年留法建築師林雅茵，率領一批參加多元就業方案的中高齡失業者，展開化腐朽為神奇的改造行動，重新賦予錢來也雜貨店新時代意義，經過閒置空間改造，十分具當地特色風情。 「錢來也」牆壁外觀是利用當地廢棄瓦片、貝殼、蚵殼鋪至而成，屋前掛著金元寶的招牌，象徵生意興隆、財源滾滾。偶像劇「王子變青蛙」更特別在此拍攝，經電視劇播出後，吸引許多遊客前來拍照留影。',
-        Description:
-          '錢來也雜貨店興建於西元1952年，為傳統斜瓦平房的老建築。早期做為台鹽鹽工福利社，提供購買日常用品及育樂中心，直到北門鹽場停止鹽業生產工作，福利社也正式劃下句點。西元2003年留法建築師林雅茵，率領一批參加多元就業方案的中高齡失業者，展開化腐朽為神奇的改造行動，重新賦予錢來也雜貨店新時代意義，經過閒置空間改造，十分具當地特色風情。 「錢來也」牆壁外觀是利用當地廢棄瓦片、貝殼、蚵殼鋪至而成，屋前掛著金元寶的招牌，象徵生意興隆、財源滾滾。偶像劇「王子變青蛙」更特別在此拍攝，經電視劇播出後，吸引許多遊客前來拍照留影。',
-        Phone: '886-6-7861515',
-        Address: '臺南市727北門區北門區舊埕187號',
-        ZipCode: '727',
-        OpenTime:
-          '星期日08:30–17:30星期一08:30–17:30星期二08:30–17:30星期三08:30–17:30星期四08:30–17:30星期五08:30–17:30星期六08:30–17:30',
-        Picture: {
-          PictureUrl1: 'https://swcoast-nsa.travel/image/2566/640x480',
-          PictureDescription1: '錢來也'
-        },
-        Position: {
-          PositionLon: 120.12399291992188,
-          PositionLat: 23.26803970336914,
-          GeoHash: 'wsjkm7zd5'
-        },
-        ParkingPosition: {},
-        City: '臺南市',
-        SrcUpdateTime: '2021-11-29T01:11:28+08:00',
-        UpdateTime: '2021-11-29T01:33:50+08:00'
-      },
+      defaultCardItem: {},
+      // defaultCardItem: {
+      //   ID: 'C1_315081600H_000138',
+      //   ScenicSpotID: 'C1_315081600H_000138',
+      //   Name: '錢來也雜貨店',
+      //   ScenicSpotName: '錢來也雜貨店',
+      //   DescriptionDetail:
+      //     '錢來也雜貨店興建於西元1952年，為傳統斜瓦平房的老建築。早期做為台鹽鹽工福利社，提供購買日常用品及育樂中心，直到北門鹽場停止鹽業生產工作，福利社也正式劃下句點。西元2003年留法建築師林雅茵，率領一批參加多元就業方案的中高齡失業者，展開化腐朽為神奇的改造行動，重新賦予錢來也雜貨店新時代意義，經過閒置空間改造，十分具當地特色風情。 「錢來也」牆壁外觀是利用當地廢棄瓦片、貝殼、蚵殼鋪至而成，屋前掛著金元寶的招牌，象徵生意興隆、財源滾滾。偶像劇「王子變青蛙」更特別在此拍攝，經電視劇播出後，吸引許多遊客前來拍照留影。',
+      //   Description:
+      //     '錢來也雜貨店興建於西元1952年，為傳統斜瓦平房的老建築。早期做為台鹽鹽工福利社，提供購買日常用品及育樂中心，直到北門鹽場停止鹽業生產工作，福利社也正式劃下句點。西元2003年留法建築師林雅茵，率領一批參加多元就業方案的中高齡失業者，展開化腐朽為神奇的改造行動，重新賦予錢來也雜貨店新時代意義，經過閒置空間改造，十分具當地特色風情。 「錢來也」牆壁外觀是利用當地廢棄瓦片、貝殼、蚵殼鋪至而成，屋前掛著金元寶的招牌，象徵生意興隆、財源滾滾。偶像劇「王子變青蛙」更特別在此拍攝，經電視劇播出後，吸引許多遊客前來拍照留影。',
+      //   Phone: '886-6-7861515',
+      //   Address: '臺南市727北門區北門區舊埕187號',
+      //   ZipCode: '727',
+      //   OpenTime:
+      //     '星期日08:30–17:30星期一08:30–17:30星期二08:30–17:30星期三08:30–17:30星期四08:30–17:30星期五08:30–17:30星期六08:30–17:30',
+      //   Picture: {
+      //     PictureUrl1: 'https://swcoast-nsa.travel/image/2566/640x480',
+      //     PictureDescription1: '錢來也'
+      //   },
+      //   Position: {
+      //     PositionLon: 120.12399291992188,
+      //     PositionLat: 23.26803970336914,
+      //     GeoHash: 'wsjkm7zd5'
+      //   },
+      //   ParkingPosition: {},
+      //   City: '臺南市',
+      //   SrcUpdateTime: '2021-11-29T01:11:28+08:00',
+      //   UpdateTime: '2021-11-29T01:33:50+08:00'
+      // },
       cityValue: '',
       cityData: [
         { name: '臺北市', value: 'Taipei' },
@@ -169,21 +220,25 @@ export default {
   },
   methods: {
     // 1.取得傳進來的景點所在城市
-    getcityValue() {
-      this.cityData.forEach((item) => {
-        if (this.defaultCardItem.City === item.name) {
-          this.cityValue = item.value;
-          console.log('cityValue', this.cityValue);
-        }
-      });
+    async getcityValue() {
+      try {
+        const cityValue = this.cityData.filter(
+          (item) => this.defaultCardItem.City === item.name
+        );
+        this.cityValue = cityValue[0].value;
+
+        console.log('cityValue', this.cityValue);
+      } catch (error) {
+        console.log(error);
+      }
     },
     // 2-1.取得該城市之 餐廳資料
     async getFoodDataByCity() {
       try {
-        this.getcityValue();
         const foodResponse = await this.axios.get(this.foodUrl, this.config);
         this.foodData = foodResponse.data;
-        console.log('foodData', this.foodData);
+        // console.log('foodData', this.foodData);
+        console.log('foodData');
       } catch (error) {
         console.log(error);
       }
@@ -191,10 +246,10 @@ export default {
     // 2-2.取得該城市之 住宿資料
     async getHotelDataByCity() {
       try {
-        this.getcityValue();
         const hotelResponse = await this.axios.get(this.hotelUrl, this.config);
         this.hotelData = hotelResponse.data;
-        console.log('hotelData', this.hotelData);
+        // console.log('hotelData', this.hotelData);
+        console.log('hotelData');
       } catch (error) {
         console.log(error);
       }
@@ -202,16 +257,15 @@ export default {
     // 2-3.取得該城市之 活動資料
     async getEventDataByCity() {
       try {
-        this.getcityValue();
         const eventResponse = await this.axios.get(this.eventUrl, this.config);
         this.eventData = eventResponse.data;
-        console.log('eventData', this.eventData);
+        // console.log('eventData', this.eventData);
+        console.log('eventData');
       } catch (error) {
         console.log(error);
       }
     },
     // 3.取得 傳進來的景點 附近餐廳/住宿/活動資料
-
     getNearByPlace(rawData, e) {
       console.log('===========================================');
       console.log('rawData', rawData);
@@ -237,7 +291,7 @@ export default {
       this.filteredDataByDistance = this.getDataByDistance(rawData);
 
       // 渲染圖標及Popup
-      this.renderMarkerAndPopup(this.filteredDataByDistance);
+      this.renderMarkerAndPopup([...this.filteredDataByDistance]);
 
       // 重新定位地圖 view
       this.findBounds(this.filteredDataByDistance);
@@ -299,6 +353,14 @@ export default {
           return;
         }
 
+        // 如果 data 名字 等於 頁面標題，return
+        const Name = data.RestaurantName
+          ? 'RestaurantName'
+          : data.HotelName
+          ? 'HotelName'
+          : 'ActivityName';
+        if (data[Name] === this.defaultCardItem[this.Name]) return;
+
         const latitude = data.Position.PositionLat;
         const longitude = data.Position.PositionLon;
         return (
@@ -337,8 +399,7 @@ export default {
         );
       });
 
-      console.log('selectedPosition', selectedPosition);
-      console.log('selectedSpot', selectedSpot);
+      console.log('showCard, selectedSpot', selectedSpot);
 
       // 傳送資料至 card 元件
       this.cardItem = { ...selectedSpot[0] };
@@ -351,8 +412,13 @@ export default {
       this.mymap.flyTo(selectedPosition, 18);
 
       // 改變圖標顏色
+      const Name = { ...selectedSpot[0] }.RestaurantName
+        ? 'RestaurantName'
+        : { ...selectedSpot[0] }.HotelName
+        ? 'HotelName'
+        : 'ActivityName';
       this.changeCurrentMarkerColor(
-        this.cardItem.Name,
+        this.cardItem[Name],
         selectedPosition,
         this.cardItem
       );
@@ -362,13 +428,19 @@ export default {
       if (this.defaultMarkerPopup.marker.getIcon() === this.greenIcon) return;
       this.changeDefaultMarkerPopup(this.greenIcon, 'custom-popup-green');
 
-      console.log('現在的 cardItem', this.cardItem);
+      console.log('showCard, 現在的 cardItem[this.Name]', this.cardItem[Name]);
+      console.log('showCard, 現在的 cardItem', this.cardItem);
+      console.log('showCard, geoArr', this.geoArr);
     },
     renderMarkerAndPopup(filteredDataByDistance) {
       filteredDataByDistance.forEach((data) => {
         const dataLatitude = data.Position.PositionLat;
         const dataLongitude = data.Position.PositionLon;
-        const dataName = data.Name;
+        const dataName = data.RestaurantName
+          ? data.RestaurantName
+          : data.HotelName
+          ? data.HotelName
+          : data.ActivityName;
         const markerPopup = this.setMarkerPopup(
           dataLatitude,
           dataLongitude,
@@ -377,11 +449,12 @@ export default {
           this.showCard,
           'custom-popup-blue'
         );
+        console.log('dataName', dataName);
 
         // 儲存地圖資料
         this.savePositionData(dataName, markerPopup.marker, markerPopup.popup);
-        console.log('儲存地圖資料 geoArr', this.geoArr);
       });
+      console.log('geoArr', this.geoArr);
     },
     changeDefaultMarkerPopup(icon, customPopup) {
       // 移除 default marker 及 popup
@@ -392,7 +465,7 @@ export default {
       this.defaultMarkerPopup = this.setMarkerPopup(
         this.latitude,
         this.longitude,
-        `${this.defaultCardItem.Name}`,
+        `${this.defaultCardItem[this.Name]}`,
         icon,
         this.showDefaultCard,
         customPopup
@@ -401,6 +474,10 @@ export default {
       this.mymap.addLayer(this.defaultMarkerPopup.marker);
     },
     changeCurrentMarkerColor(name, selectedPosition, selectedSpot) {
+      console.log(
+        '///////////////// changeCurrentMarkerColor ///////////////////'
+      );
+
       const latitude = selectedPosition[0];
       const longitude = selectedPosition[1];
 
@@ -412,8 +489,13 @@ export default {
       );
 
       // 找到點選的圖標資料並將其從陣列geoArr移除
+      const selectedSpotName = selectedSpot.RestaurantName
+        ? 'RestaurantName'
+        : selectedSpot.HotelName
+        ? 'HotelName'
+        : 'ActivityName';
       const selectedItem = this.geoArr.filter(
-        (item) => item.name === selectedSpot.Name
+        (item) => item.name === selectedSpot[selectedSpotName]
       );
       const index = this.geoArr.indexOf(selectedItem[0]);
       this.geoArr.splice(index, 1);
@@ -423,6 +505,13 @@ export default {
       const selectedPopup = selectedLayer[0].popup;
       this.removeLayer(selectedMarker);
       this.removeLayer(selectedPopup);
+
+      console.log('selectedSpot', selectedSpot);
+      console.log('selectedSpotName', selectedSpotName);
+      console.log('selectedMarker', selectedMarker);
+      console.log('selectedPopup', selectedPopup);
+      console.log('selectedPopup._content', selectedPopup._content);
+      console.log('name', name);
 
       // 建立新圖標
       const newMarkerPopup = this.setMarkerPopup(
@@ -438,7 +527,12 @@ export default {
       this.savePositionData(name, newMarkerPopup.marker, newMarkerPopup.popup);
     },
     changePreviousMarkerColor() {
+      console.log(
+        '///////////////// changeCurrentMarkerColor ///////////////////'
+      );
+
       const geoArrLength = this.geoArr.length;
+      console.log('geoArrLength', geoArrLength);
 
       // 只有一筆資料(沒有前一筆)
       if (geoArrLength === 1) return;
@@ -461,6 +555,10 @@ export default {
         this.showCard,
         'custom-popup-blue'
       );
+
+      console.log('previousItem', previousItem[0]);
+      console.log('previousItemIndex', previousItemIndex);
+      console.log('previousItemName', previousItemName);
 
       // 將previous marker 從 geoArr 移除並將更新的 marker 資料插入 geoArr
       this.geoArr.splice(previousItemIndex, 1, {
@@ -536,7 +634,7 @@ export default {
       this.defaultMarkerPopup = this.setMarkerPopup(
         latitude,
         longitude,
-        `${this.defaultCardItem.Name}`,
+        `${this.defaultCardItem[this.Name]}`,
         this.redIcon,
         this.showDefaultCard,
         'custom-popup-red'
@@ -546,6 +644,7 @@ export default {
       const marker = L.marker([latitude, longitude], { icon: icon })
         .addTo(this.mymap)
         .on('click', card);
+
       const popup = L.popup(
         { autoClose: false, closeButton: false, className: customPopup },
         marker
@@ -553,6 +652,7 @@ export default {
         .setLatLng([latitude, longitude])
         .setContent(pupUpContent)
         .openOn(this.mymap);
+
       return { marker, popup };
     },
     createIcon(colorIcon) {
@@ -570,10 +670,22 @@ export default {
   },
   created() {
     console.log('cardDetail created');
-    // this.getFoodDataByCity();
-    // this.getHotelDataByCity();
-    // this.getEventDataByCity();
+
+    // 接收 Card.vue 傳來資料（讀取localStorage）
+    this.defaultCardItem = JSON.parse(
+      localStorage.getItem('passToCardDetails')
+    );
     this.cardItem = this.defaultCardItem;
+    this.Name = { ...this.defaultCardItem }.ScenicSpotName
+      ? 'ScenicSpotName'
+      : { ...this.defaultCardItem }.RestaurantName
+      ? 'RestaurantName'
+      : 'ActivityName';
+
+    this.getcityValue();
+    this.getFoodDataByCity();
+    this.getHotelDataByCity();
+    this.getEventDataByCity();
 
     this.blueIcon = this.createIcon(this.blueIconUrl);
     this.redIcon = this.createIcon(this.redIconUrl);
@@ -581,10 +693,7 @@ export default {
   },
   mounted() {
     console.log('cardDetail mounted');
-    this.emitter.on('cardDetail', (data) => {
-      this.test = data;
-      console.log('cardDetail接收', this.test);
-    });
+
     this.latitude = this.defaultCardItem.Position.PositionLat;
     this.longitude = this.defaultCardItem.Position.PositionLon;
     this.setMap(this.latitude, this.longitude);

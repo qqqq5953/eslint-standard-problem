@@ -1,6 +1,7 @@
 <template>
+  <HeaderSection></HeaderSection>
   <h1>moreresult</h1>
-  <PopularSection></PopularSection>
+  <PopularSection :data="moreResultData"></PopularSection>
 </template>
 
 <script>
@@ -15,7 +16,8 @@ export default {
         'https://ptx.transportdata.tw/MOTC/v2/Tourism/Restaurant/Taipei?$top=10&$format=JSON',
       eventUrl:
         'https://ptx.transportdata.tw/MOTC/v2/Tourism/Activity/Taipei?$top=10&$format=JSON',
-      moreResultData: null
+      moreResultData: null,
+      moreResultType: ''
     };
   },
   methods: {
@@ -68,14 +70,17 @@ export default {
     }
   },
   created() {
-    this.getPlaceData();
-    this.getFoodData();
-    this.getEventData();
-  },
-  beforeUnmount() {
-    this.emitter.on('more-result', (data) => {
-      console.log('moreResult接收', data);
-    });
+    // 接收 PopularSection.vue 傳來資料（讀取localStorage）
+    this.moreResultType = JSON.parse(localStorage.getItem('passToMoreResult'));
+    console.log('moreResult 接收', this.moreResultType);
+
+    if (this.moreResultType === '熱門景點') {
+      this.getPlaceData();
+    } else if (this.moreResultType === '熱門美食') {
+      this.getFoodData();
+    } else {
+      this.getEventData();
+    }
   }
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <!-- <HeaderSection></HeaderSection> -->
+  <!-- v-if="searchData" -->
   <Pagination
-    v-if="searchData"
     :current-page="currentPage"
     :total-pages="totalPages"
     @page-change="onPageChange"
@@ -68,8 +68,10 @@ export default {
   },
   methods: {
     moreResult() {
-      console.log('moreResult 發射', this.defaultType);
-      this.emitter.emit('more-result', this.defaultType);
+      // 傳送到 MoreResult.vue (用 localStorage)
+      const moreResult = JSON.stringify(this.defaultType);
+      console.log('moreResult 發射', moreResult);
+      localStorage.setItem('passToMoreResult', moreResult);
     },
     setPageButton() {
       this.totalPages = Math.ceil(this.searchData.length / this.cardPerPage);
@@ -110,9 +112,6 @@ export default {
   },
   created() {
     console.log('PopulatSection created');
-  },
-  mounted() {
-    console.log('PopularSection mounted');
     // 接收篩選資料
     this.emitter.on('filteredData', (data) => {
       this.searchData = data.filteredData;
@@ -129,9 +128,6 @@ export default {
       console.log('emit on searchData 的 searchTypeData', this.searchTypeData);
     });
   },
-  updated() {
-    console.log('PopularSection updated');
-  },
   beforeUnmount() {
     console.log('PopularSection beforeUnmont');
     this.emitter.off('filteredData', (data) => {
@@ -146,9 +142,6 @@ export default {
       console.log('emit on searchData 的 searchData', this.searchData);
       console.log('emit on searchData 的 searchTypeData', this.searchTypeData);
     });
-  },
-  unmounted() {
-    console.log('PopularSection unmonted');
   }
 };
 </script>
