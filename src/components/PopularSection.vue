@@ -29,7 +29,13 @@
       />
     </div>
     <div class="card_section_content">
-      <Card v-for="obj in paginatedData" :key="obj.ID" :item="obj"></Card>
+      <Card v-for="obj in paginatedData" :key="obj.ID" :item="obj">
+        <!-- <template #card_moreInfoBtn>
+          <router-link :to="{ name: 'CardDetail' }" >
+            <button type="button" class="card_moreInfoBtn">查看詳情</button>
+          </router-link>
+        </template> -->
+      </Card>
     </div>
     <router-link
       :to="{ name: 'MoreResult' }"

@@ -20,7 +20,7 @@
         <button
           type="button"
           class="banner_filterBtn"
-          @click="changeMaskStatus"
+          @click="this.hasMask = !this.hasMask"
         >
           <div class="banner_filterIcon">
             <i class="fas fa-bars"></i>
@@ -37,9 +37,9 @@
           :disabled="!this.search"
         />
       </router-link>
-
+      <!-- :get-mask="hasMask" -->
       <FilterSection
-        :get-mask="hasMask"
+        v-if="hasMask"
         @close-mask="changeMaskStatus"
       ></FilterSection>
     </section>
@@ -66,6 +66,10 @@ export default {
     };
   },
   methods: {
+    changeMaskStatus() {
+      this.hasMask = !this.hasMask;
+      this.emitter.emit('activate-loading', this.hasMask);
+    },
     async getAllData() {
       try {
         const urlArr = [this.placeUrl, this.foodUrl, this.eventUrl];
@@ -102,10 +106,6 @@ export default {
       // this.emitter.emit('searchStatus', false);
 
       this.search = '';
-    },
-    changeMaskStatus() {
-      this.hasMask = !this.hasMask;
-      this.emitter.emit('activate-loading', this.hasMask);
     },
     GetAuthorizationHeader() {
       const AppID = '096409078e0c483f87d2ae7551b214ea';

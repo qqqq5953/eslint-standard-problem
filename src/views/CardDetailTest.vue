@@ -2,7 +2,7 @@
   <div class="wrap">
     <header>
       <Navbar></Navbar>
-      <section class="info_section outline-b">
+      <section class="info_section">
         <h2>{{ defaultCardItem[this.Name] }}</h2>
         <p class="badge">
           {{
@@ -13,8 +13,8 @@
               : '其他類'
           }}
         </p>
-        <div class="info_content outline-b">
-          <div class="info_img outline" style="">
+        <div class="info_content">
+          <div class="info_img">
             <img :src="defaultCardItem.Picture.PictureUrl1" alt="" />
           </div>
           <div class="info_details">
@@ -25,9 +25,9 @@
                 <input
                   id="phoneNumber"
                   type="text"
-                  :value="defaultCardItem.Phone"
+                  :value="defaultCardItem.Phone || '無'"
                 />
-                <a href="#" @click="copyToClipBoard"
+                <a href="#" @click.prevent="copyToClipBoard"
                   ><i class="far fa-copy"></i
                 ></a>
               </div>
@@ -35,7 +35,7 @@
             <div class="info_details_address">
               <h4>地址：</h4>
               <div>
-                <span>{{ defaultCardItem.Address }}</span>
+                <span>{{ defaultCardItem.Address || '無' }}</span>
                 <a href="#mapid"><i class="fas fa-map-marked-alt"></i></a>
               </div>
             </div>
@@ -95,7 +95,7 @@
         </nav>
 
         <!--地圖-->
-        <section class="map_section_details" style="outline: 1px solid red">
+        <section class="map_section_details">
           <div
             id="mapid"
             class="map_default"
@@ -108,7 +108,22 @@
             @click="showTable"
             >查無資料!<br />查看官網活動 <i class="fas fa-chevron-down"></i
           ></a>
-          <Card :item="cardItem" v-if="isCardShown"></Card>
+          <Card :item="cardItem" v-if="isCardShown" :txt="temp">
+            <template #card_phone="{ item }">
+              <div class="card_phone">
+                <h5>
+                  電話：{{ item.Phone || '無' }}
+                  <i
+                    class="fas fa-phone-alt"
+                    :class="{ 'd-none': !item.Phone }"
+                  ></i>
+                </h5>
+              </div>
+            </template>
+            <template #card_address="{ item }">
+              <div class="card_address">地址：{{ item.Address || '無' }}</div>
+            </template>
+          </Card>
         </section>
       </section>
     </div>
@@ -120,7 +135,7 @@ import L from 'leaflet';
 export default {
   data() {
     return {
-      test: null,
+      // 地圖資料
       greenIconUrl:
         'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
       redIconUrl:
@@ -141,34 +156,6 @@ export default {
       Name: '',
       cardItem: {},
       defaultCardItem: {},
-      // defaultCardItem: {
-      //   ID: 'C1_315081600H_000138',
-      //   ScenicSpotID: 'C1_315081600H_000138',
-      //   Name: '錢來也雜貨店',
-      //   ScenicSpotName: '錢來也雜貨店',
-      //   DescriptionDetail:
-      //     '錢來也雜貨店興建於西元1952年，為傳統斜瓦平房的老建築。早期做為台鹽鹽工福利社，提供購買日常用品及育樂中心，直到北門鹽場停止鹽業生產工作，福利社也正式劃下句點。西元2003年留法建築師林雅茵，率領一批參加多元就業方案的中高齡失業者，展開化腐朽為神奇的改造行動，重新賦予錢來也雜貨店新時代意義，經過閒置空間改造，十分具當地特色風情。 「錢來也」牆壁外觀是利用當地廢棄瓦片、貝殼、蚵殼鋪至而成，屋前掛著金元寶的招牌，象徵生意興隆、財源滾滾。偶像劇「王子變青蛙」更特別在此拍攝，經電視劇播出後，吸引許多遊客前來拍照留影。',
-      //   Description:
-      //     '錢來也雜貨店興建於西元1952年，為傳統斜瓦平房的老建築。早期做為台鹽鹽工福利社，提供購買日常用品及育樂中心，直到北門鹽場停止鹽業生產工作，福利社也正式劃下句點。西元2003年留法建築師林雅茵，率領一批參加多元就業方案的中高齡失業者，展開化腐朽為神奇的改造行動，重新賦予錢來也雜貨店新時代意義，經過閒置空間改造，十分具當地特色風情。 「錢來也」牆壁外觀是利用當地廢棄瓦片、貝殼、蚵殼鋪至而成，屋前掛著金元寶的招牌，象徵生意興隆、財源滾滾。偶像劇「王子變青蛙」更特別在此拍攝，經電視劇播出後，吸引許多遊客前來拍照留影。',
-      //   Phone: '886-6-7861515',
-      //   Address: '臺南市727北門區北門區舊埕187號',
-      //   ZipCode: '727',
-      //   OpenTime:
-      //     '星期日08:30–17:30星期一08:30–17:30星期二08:30–17:30星期三08:30–17:30星期四08:30–17:30星期五08:30–17:30星期六08:30–17:30',
-      //   Picture: {
-      //     PictureUrl1: 'https://swcoast-nsa.travel/image/2566/640x480',
-      //     PictureDescription1: '錢來也'
-      //   },
-      //   Position: {
-      //     PositionLon: 120.12399291992188,
-      //     PositionLat: 23.26803970336914,
-      //     GeoHash: 'wsjkm7zd5'
-      //   },
-      //   ParkingPosition: {},
-      //   City: '臺南市',
-      //   SrcUpdateTime: '2021-11-29T01:11:28+08:00',
-      //   UpdateTime: '2021-11-29T01:33:50+08:00'
-      // },
       cityValue: '',
       cityData: [
         { name: '臺北市', value: 'Taipei' },
@@ -194,7 +181,6 @@ export default {
         { name: '澎湖縣', value: 'PenghuCounty' },
         { name: '連江縣', value: 'LienchiangCounty' }
       ],
-      temp: '',
       foodData: [],
       hotelData: [],
       eventData: [],
@@ -204,7 +190,9 @@ export default {
       filteredDataByDistance: [],
       isCardShown: true,
       noDataWarning: false,
-      isTableShown: false
+      isTableShown: false,
+      // 暫存變數
+      temp: ''
     };
   },
   computed: {
@@ -671,10 +659,17 @@ export default {
     console.log('cardDetail created');
 
     // 接收 Card.vue 傳來資料（讀取localStorage）
+    this.temp = localStorage.getItem('moreInfoBtnDnone');
     this.defaultCardItem = JSON.parse(
       localStorage.getItem('passToCardDetails')
     );
+
+    console.log('defaultCardItem', this.defaultCardItem);
+
+    // 複製一份到 cardItem
     this.cardItem = this.defaultCardItem;
+
+    // 定義 defaultCardItem 的 Name 為何
     this.Name = { ...this.defaultCardItem }.ScenicSpotName
       ? 'ScenicSpotName'
       : { ...this.defaultCardItem }.RestaurantName
@@ -702,4 +697,12 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/cardDetail.scss';
+
+.card {
+  margin-bottom: 0;
+
+  &:not(&:nth-of-type(3n)) {
+    margin-right: 0;
+  }
+}
 </style>

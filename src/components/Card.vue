@@ -24,16 +24,25 @@
               ? item.ScenicSpotName
               : item.RestaurantName
               ? item.RestaurantName
+              : item.HotelName
+              ? item.HotelName
               : item.ActivityName
           }}
         </h4>
       </div>
+      <slot name="card_phone" :item="item"></slot>
+      <slot name="card_address" :item="item"></slot>
       <div class="card_openTime">
         <h5>開放時間：</h5>
-        <div class="card_openTime_details">{{ item.OpenTime }}</div>
+        <div class="card_openTime_details">{{ item.OpenTime || '無' }}</div>
       </div>
     </div>
-    <router-link :to="{ name: 'CardDetail' }" @click="toContentPage">
+    <!-- <slot name="card_moreInfoBtn" @click="toContentPage"></slot> -->
+    <router-link
+      :to="{ name: 'CardDetail' }"
+      @click="toContentPage"
+      v-if="txt !== 'cardDetail'"
+    >
       <button type="button" class="card_moreInfoBtn">查看詳情</button>
     </router-link>
   </div>
@@ -41,14 +50,16 @@
 
 <script>
 export default {
-  props: ['item'],
+  props: ['item', 'txt'],
   methods: {
     toContentPage() {
       console.log('card 發送');
 
       // 傳送到 CardDetails.vue (用 localStorage)
       const cardItem = JSON.stringify({ ...this.item });
+      const moreInfoBtnDnone = 'cardDetail';
       localStorage.setItem('passToCardDetails', cardItem);
+      localStorage.setItem('moreInfoBtnDnone', moreInfoBtnDnone);
     }
   }
 };

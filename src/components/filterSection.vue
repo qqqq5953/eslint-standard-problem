@@ -1,4 +1,5 @@
 <template>
+  <!-- v-show="getMask" -->
   <div
     class="mask outline"
     style="
@@ -12,7 +13,6 @@
       right: 0;
       z-index: 100;
     "
-    v-show="getMask"
   >
     <div class="banner_filterArea">
       <ul class="typeArea" ref="typeArea">
@@ -24,14 +24,19 @@
             </summary>
             <ul class="dropdown_list">
               <template v-for="item in popularType" :key="item.name">
-                <li class="dropdown_item" @click="selectPopularType(item)">
+                <li
+                  class="dropdown_item"
+                  @click.prevent="selectPopularType(item)"
+                >
                   {{ item.name }}
                 </li>
               </template>
             </ul>
           </details>
         </li>
-        <a href="#"><i class="fas fa-2x fa-times" @click="closeMask"></i></a>
+        <a href="#"
+          ><i class="fas fa-2x fa-times" @click.prevent="closeMask"></i
+        ></a>
       </ul>
 
       <ul
@@ -50,7 +55,7 @@
                 <template v-for="item in regionItem.regionCity" :key="item">
                   <li
                     class="dropdown_item"
-                    @click="
+                    @click.prevent="
                       dropdownItemsSelected($event);
                       selectRegion(item.region, item.city, item.value);
                     "
@@ -67,7 +72,7 @@
         <input
           type="button"
           class="banner_filterForm_searchBtn"
-          @click="
+          @click.prevent="
             closeMask();
             sendFilterData();
           "
@@ -84,7 +89,7 @@
 import JsSHA from 'jssha';
 
 export default {
-  props: ['getMask'],
+  // props: ['getMask'],
   data() {
     return {
       regionData: [
