@@ -449,7 +449,6 @@ export default {
           this.showCard,
           'custom-popup-blue'
         );
-        console.log('dataName', dataName);
 
         // 儲存地圖資料
         this.savePositionData(dataName, markerPopup.marker, markerPopup.popup);

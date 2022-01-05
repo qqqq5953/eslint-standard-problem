@@ -1,22 +1,34 @@
 <template>
   <HeaderSection></HeaderSection>
-  <PopularSection :data="placeData" defaultType="熱門景點">
+  <PopularSection
+    :data="placeData"
+    defaultType="熱門景點"
+    resultType="DefaultType"
+  >
     <template #card_section_title_text>
-      Default 熱門景點
+      熱門景點
       <img src="@/assets/images/place-icon.png" alt="place-icon" />
     </template>
   </PopularSection>
 
-  <PopularSection :data="foodData" defaultType="熱門美食">
+  <PopularSection
+    :data="foodData"
+    defaultType="熱門美食"
+    resultType="DefaultType"
+  >
     <template #card_section_title_text>
-      Default 熱門美食
+      熱門美食
       <img src="@/assets/images/restaurant-icon.png" alt="restaurant-icon" />
     </template>
   </PopularSection>
 
-  <PopularSection :data="eventData" defaultType="近期活動">
+  <PopularSection
+    :data="eventData"
+    defaultType="近期活動"
+    resultType="DefaultType"
+  >
     <template #card_section_title_text>
-      Default 近期活動
+      近期活動
       <img src="@/assets/images/event-icon.png" alt="event-icon"
     /></template>
   </PopularSection>

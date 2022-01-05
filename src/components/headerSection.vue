@@ -7,16 +7,14 @@
       <h3 class="banner_subtitle">景點、活動、美食</h3>
       <div class="banner_search">
         <div class="banner_searchBar">
-          <!-- <router-link @keyup.enter="searchBtn" :to="{ name: 'searchResult' }">
-            <input
-              type="text"
-              placeholder="請輸入關鍵字"
-              v-model.trim="search"
-            />
-            <i class="fas fa-lg fa-search"></i>
-          </router-link> -->
-          <!-- @keyup.enter="searchBtn" -->
-          <input type="text" placeholder="請輸入關鍵字" v-model.trim="search" />
+          <input
+            type="text"
+            placeholder="請輸入關鍵字"
+            v-model.trim="search"
+            @keyup.enter="searchBtn"
+          />
+          <!-- this.$router.push({ name: 'SearchResult' }); -->
+
           <i class="fas fa-lg fa-search"></i>
         </div>
         <button
@@ -60,11 +58,11 @@ export default {
       search: '',
       allData: [],
       placeUrl:
-        'https://ptx.transportdata.tw/MOTC/v2/Tourism/ScenicSpot/Taipei?$top=6&$format=JSON',
+        'https://ptx.transportdata.tw/MOTC/v2/Tourism/ScenicSpot/Taipei?&$format=JSON',
       foodUrl:
-        'https://ptx.transportdata.tw/MOTC/v2/Tourism/Restaurant/Taipei?$top=6&$format=JSON',
+        'https://ptx.transportdata.tw/MOTC/v2/Tourism/Restaurant/Taipei?&$format=JSON',
       eventUrl:
-        'https://ptx.transportdata.tw/MOTC/v2/Tourism/Activity/Taipei?$top=6&$format=JSON'
+        'https://ptx.transportdata.tw/MOTC/v2/Tourism/Activity/Taipei?&$format=JSON'
     };
   },
   methods: {
@@ -84,10 +82,12 @@ export default {
       }
     },
     async searchBtn() {
+      console.log('searchBtn');
+      this.$router.push({ name: 'SearchResult' });
+
       if (this.search === '') return;
 
       await this.getAllData();
-      console.log('this.allData', this.allData);
 
       const searchData = this.allData.filter((data) => {
         const name = data.ScenicSpotName
@@ -127,6 +127,10 @@ export default {
         'X-Date': GMTString
       };
     }
+  },
+  beforeUnmount() {
+    console.log('HeaderSection beforeUnmont');
+    this.emitter.off('searchData');
   }
 };
 </script>

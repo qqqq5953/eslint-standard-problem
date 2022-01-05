@@ -153,10 +153,10 @@ export default {
       regionArea: [],
       dropdownsNoText: [],
       dropdownsHasText: [],
-      handler: {
-        click: [this.closeMask, this.sendFilterData],
-        'keyup.enter': [this.closeMask, this.sendFilterData]
-      },
+      // handler: {
+      //   click: [this.closeMask, this.sendFilterData],
+      //   'keyup.enter': [this.closeMask, this.sendFilterData]
+      // },
       // popularSection測試
       filteredTypeData: '',
       filteredCityData: '',
@@ -166,13 +166,13 @@ export default {
   },
   computed: {
     placeUrl() {
-      return `https://ptx.transportdata.tw/MOTC/v2/Tourism/${this.filteredTypeData}/${this.filteredCityData}?$top=50&$format=JSON`;
+      return `https://ptx.transportdata.tw/MOTC/v2/Tourism/${this.filteredTypeData}/${this.filteredCityData}?&$format=JSON`;
     },
     foodUrl() {
-      return `https://ptx.transportdata.tw/MOTC/v2/Tourism/${this.filteredTypeData}/${this.filteredCityData}?$top=50&$format=JSON`;
+      return `https://ptx.transportdata.tw/MOTC/v2/Tourism/${this.filteredTypeData}/${this.filteredCityData}?&$format=JSON`;
     },
     eventUrl() {
-      return `https://ptx.transportdata.tw/MOTC/v2/Tourism/${this.filteredTypeData}/${this.filteredCityData}?$top=50&$format=JSON`;
+      return `https://ptx.transportdata.tw/MOTC/v2/Tourism/${this.filteredTypeData}/${this.filteredCityData}?&$format=JSON`;
     }
   },
   watch: {
@@ -192,14 +192,21 @@ export default {
     }
   },
   methods: {
+    closeMask() {
+      // 到 HeaderSection.vue
+      this.$emit('closeMask');
+    },
     async getPlaceData() {
       try {
         const placeResponse = await this.axios.get(this.placeUrl, this.config);
         this.filteredData = placeResponse.data;
+
+        // 傳送資料給 PopularSection.vue
         this.emitter.emit('filteredData', {
           filteredData: this.filteredData,
           filteredTypeData: '熱門景點'
         });
+
         console.log('placeData', this.filteredData);
       } catch (error) {
         console.log(error);
@@ -209,10 +216,13 @@ export default {
       try {
         const foodResponse = await this.axios.get(this.foodUrl, this.config);
         this.filteredData = foodResponse.data;
+
+        // 傳送資料給 PopularSection.vue
         this.emitter.emit('filteredData', {
           filteredData: this.filteredData,
           filteredTypeData: '熱門美食'
         });
+
         console.log('foodData', this.filteredData);
       } catch (error) {
         console.log(error);
@@ -222,10 +232,13 @@ export default {
       try {
         const eventResponse = await this.axios.get(this.eventUrl, this.config);
         this.filteredData = eventResponse.data;
+
+        // 傳送資料給 PopularSection.vue
         this.emitter.emit('filteredData', {
           filteredData: this.filteredData,
           filteredTypeData: '近期活動'
         });
+
         console.log('eventData', this.filteredData);
       } catch (error) {
         console.log(error);
@@ -311,9 +324,7 @@ export default {
         console.log('reset 完成', regionItem.selectedCity);
       });
     },
-    closeMask() {
-      this.$emit('closeMask');
-    },
+
     dropdownListToggle(event) {
       console.log('------------------------------------------');
       // Only run if the dropdown is open

@@ -5,7 +5,7 @@
       <!--First-->
       <li class="page-item" @click="onFirstPage()">
         <router-link
-          :to="{ name: 'SearchResult' }"
+          :to="{ name: resultType }"
           class="page-link"
           :class="{ 'disabled-btn': currentPage === 1 }"
           href="#"
@@ -17,7 +17,7 @@
       <!--Prev-->
       <li class="page-item" @click="onPreviousPage()">
         <router-link
-          :to="{ name: 'SearchResult' }"
+          :to="{ name: resultType }"
           class="page-link"
           :class="{ 'disabled-btn': currentPage === 1 }"
           href="#"
@@ -26,10 +26,10 @@
         </router-link>
       </li>
 
-      <!--數字 :class="{ 'd-none': !searchStatus }"-->
+      <!--數字 :class="{ 'd-none': !searchStatus }"  MoreResult-->
       <li class="page-item page-item-number" v-for="page in pages" :key="page">
         <router-link
-          :to="{ name: 'SearchResult' }"
+          :to="{ name: resultType }"
           class="page-link"
           :class="{ 'active-btn': page.isActive }"
           href="#"
@@ -41,7 +41,7 @@
       <!--Next-->
       <li class="page-item" @click="onNextPage()">
         <router-link
-          :to="{ name: 'SearchResult' }"
+          :to="{ name: resultType }"
           class="page-link"
           :class="{ 'disabled-btn': currentPage === totalPages }"
           href="#"
@@ -53,7 +53,7 @@
       <!--Last-->
       <li class="page-item" @click="onLastPage()">
         <router-link
-          :to="{ name: 'SearchResult' }"
+          :to="{ name: resultType }"
           class="page-link"
           :class="{ 'disabled-btn': currentPage === totalPages }"
           href="#"
@@ -75,7 +75,7 @@
         @click="onCurrentPage(page.num)"
       >
         <router-link
-          :to="{ name: 'SearchResult' }"
+          :to="{ name: resultType }"
           class="page-link"
           :class="{ 'active-btn': page.isActive }"
           href="#"
@@ -98,6 +98,10 @@ export default {
     maxViewPage: {
       type: Number,
       default: 3
+    },
+    resultType: {
+      type: String,
+      default: 'SearchResult'
     }
   },
   emits: ['pageChange'],
@@ -133,7 +137,7 @@ export default {
           '最後一頁的 startPage',
           this.totalPages - this.maxViewPage + 1
         );
-        return this.totalPages - this.maxViewPage + 1;
+        return Math.max(this.totalPages - this.maxViewPage + 1, 1);
       }
 
       console.log('startPage', this.currentPage - 1);
@@ -152,6 +156,9 @@ export default {
       }
       return pageArr;
     }
+  },
+  created() {
+    console.log('resultType', this.resultType);
   }
 };
 </script>

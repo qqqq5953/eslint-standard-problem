@@ -2,9 +2,11 @@
   <!-- <HeaderSection></HeaderSection> -->
   <!-- v-if="searchData" -->
   <Pagination
+    v-if="resultType === 'MoreResult' || resultType === 'SearchResult'"
     :current-page="currentPage"
     :total-pages="totalPages"
     @page-change="onPageChange"
+    :resultType="resultType"
   ></Pagination>
   <section class="card_section">
     <div class="card_section_title">
@@ -28,17 +30,6 @@
     </div>
     <div class="card_section_content">
       <Card v-for="obj in paginatedData" :key="obj.ID" :item="obj"></Card>
-      <!-- <Card
-        v-for="obj in paginatedData"
-        :key="obj.ID"
-        :item="obj"
-      ></Card> -->
-      <!-- v-show="!paginatedData.length" -->
-      <!-- <Card
-        v-for="obj in data"
-        :key="obj.ID"
-        :item="obj"
-      ></Card> -->
     </div>
     <router-link
       :to="{ name: 'MoreResult' }"
@@ -54,7 +45,19 @@
 
 <script>
 export default {
-  props: ['data', 'defaultType'],
+  // props: ['data', 'defaultType', 'resultType'],
+  props: {
+    data: {
+      type: Array
+    },
+    defaultType: {
+      type: String
+    },
+    resultType: {
+      type: String,
+      default: 'SearchResult'
+    }
+  },
   data() {
     return {
       searchData: null,
@@ -70,17 +73,27 @@ export default {
     moreResult() {
       // 傳送到 MoreResult.vue (用 localStorage)
       const moreResult = JSON.stringify(this.defaultType);
-      console.log('moreResult 發射', moreResult);
+      console.log('========moreResult 發射========', moreResult);
       localStorage.setItem('passToMoreResult', moreResult);
     },
-    setPageButton() {
-      this.totalPages = Math.ceil(this.searchData.length / this.cardPerPage);
+    setPageButton(data) {
+      this.totalPages = Math.ceil(data.length / this.cardPerPage);
     },
     setPageData(data) {
+      console.log('執行 setPageData');
+
       const page = this.currentPage;
       const perPage = this.cardPerPage;
       const start = page * perPage - perPage;
       const end = page * perPage;
+
+      console.log('currentPage', page);
+      console.log('perPage', perPage);
+      console.log('start', start);
+      console.log('end', end);
+      console.log('更新前 paginatedData - setPageData', this.paginatedData);
+      console.log('setPageData 切割結果', data.slice(start, end));
+
       return data.slice(start, end);
     },
     onPageChange(page) {
@@ -90,12 +103,25 @@ export default {
   },
   watch: {
     data() {
-      this.paginatedData = this.data;
+      // this.paginatedData = this.data;
+      this.paginatedData = this.setPageData(this.data);
+      this.setPageButton(this.data);
+      console.log('paginatedData - watch data', this.paginatedData);
     },
     currentPage() {
-      // 當所在頁面變動時，重新傳送資料給 PopularSection.vue
-      console.log('currentPage 有變動');
+      // 當所在頁面變動時，重新賦值給 paginatedData
+
+      if (!this.searchData) {
+        console.log('執行條件');
+        this.paginatedData = this.setPageData(this.data);
+        console.log('paginatedData - currentPage', this.paginatedData);
+
+        return;
+      }
+
+      console.log('執行正常');
       this.paginatedData = this.setPageData(this.searchData);
+      console.log('paginatedData - currentPage', this.paginatedData);
     },
     searchData() {
       console.log('searchData 有變動');
@@ -104,15 +130,17 @@ export default {
       this.currentPage = 1;
 
       // 設置分頁按鈕
-      this.setPageButton();
+      this.setPageButton(this.searchData);
 
-      // 當篩選或搜尋資料完成時，傳送資料給 PopularSection.vue
+      // 當篩選或搜尋資料完成時，賦值給 PpaginatedData
       this.paginatedData = this.setPageData(this.searchData);
     }
   },
   created() {
+    console.log('resultType', this.resultType);
+
     console.log('PopulatSection created');
-    // 接收篩選資料
+    // 接收篩選資料 from FilterSection.vue
     this.emitter.on('filteredData', (data) => {
       this.searchData = data.filteredData;
       this.searchTypeData = data.filteredTypeData;
@@ -120,7 +148,7 @@ export default {
       console.log('emit on searchTypeData', this.searchTypeData);
     });
 
-    // 接收搜尋資料
+    // 接收搜尋資料 from FilterSection.vue
     this.emitter.on('searchData', (data) => {
       this.searchData = data.searchData;
       this.searchTypeData = data.title;

@@ -1,7 +1,10 @@
 <template>
   <HeaderSection></HeaderSection>
   <h1>moreresult</h1>
-  <PopularSection :data="moreResultData"></PopularSection>
+  <PopularSection
+    :data="moreResultData"
+    resultType="MoreResult"
+  ></PopularSection>
 </template>
 
 <script>
@@ -11,11 +14,11 @@ export default {
     return {
       config: { headers: this.GetAuthorizationHeader() },
       placeUrl:
-        'https://ptx.transportdata.tw/MOTC/v2/Tourism/ScenicSpot/Taipei?$top=10&$format=JSON',
+        'https://ptx.transportdata.tw/MOTC/v2/Tourism/ScenicSpot/?&$format=JSON',
       foodUrl:
-        'https://ptx.transportdata.tw/MOTC/v2/Tourism/Restaurant/Taipei?$top=10&$format=JSON',
+        'https://ptx.transportdata.tw/MOTC/v2/Tourism/Restaurant/?&$format=JSON',
       eventUrl:
-        'https://ptx.transportdata.tw/MOTC/v2/Tourism/Activity/Taipei?$top=10&$format=JSON',
+        'https://ptx.transportdata.tw/MOTC/v2/Tourism/Activity/?&$format=JSON',
       moreResultData: null,
       moreResultType: ''
     };
