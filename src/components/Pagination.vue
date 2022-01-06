@@ -114,7 +114,7 @@ export default {
       this.$emit('pageChange', this.currentPage - 1);
     },
     onCurrentPage(page) {
-      console.log('page', page);
+      // console.log('page', page);
       this.$emit('pageChange', page);
     },
     onNextPage() {
@@ -127,16 +127,16 @@ export default {
   },
   computed: {
     startPage() {
-      console.log('this.currentPage', this.currentPage);
-      console.log('this.maxViewPage', this.maxViewPage);
+      // console.log('this.currentPage', this.currentPage);
+      // console.log('this.maxViewPage', this.maxViewPage);
 
       if (this.currentPage === 1) return 1;
 
       if (this.currentPage === this.totalPages) {
-        console.log(
-          '最後一頁的 startPage',
-          this.totalPages - this.maxViewPage + 1
-        );
+        // console.log(
+        //   '最後一頁的 startPage',
+        //   this.totalPages - this.maxViewPage + 1
+        // );
         return Math.max(this.totalPages - this.maxViewPage + 1, 1);
       }
 
@@ -158,7 +158,7 @@ export default {
     }
   },
   created() {
-    console.log('resultType', this.resultType);
+    // console.log('resultType', this.resultType);
   }
 };
 </script>

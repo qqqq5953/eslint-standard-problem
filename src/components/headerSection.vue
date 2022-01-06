@@ -99,11 +99,12 @@ export default {
           : data.RestaurantName
           ? data.RestaurantName
           : data.ActivityName;
+        // const city = data.City;
         return name.match(this.search);
       });
 
+      // 傳送資料到 PopularSection.vue
       this.emitter.emit('searchData', { searchData, title: '搜尋結果' });
-      // this.emitter.emit('searchStatus', false);
 
       this.search = '';
     },
@@ -127,6 +128,9 @@ export default {
         'X-Date': GMTString
       };
     }
+  },
+  created() {
+    // this.getAllData();
   },
   beforeUnmount() {
     console.log('HeaderSection beforeUnmont');

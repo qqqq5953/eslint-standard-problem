@@ -68,8 +68,18 @@
           </li>
         </template>
       </ul>
-      <router-link :to="{ name: 'SearchResult' }">
-        <input
+      <!-- :disabled="!this.selectedCityValue" -->
+      <router-link
+        :to="{ name: 'About' }"
+        class="banner_filterForm_searchBtn"
+        @click.prevent="
+          closeMask();
+          sendFilterData();
+        "
+        ref="filterBtn"
+      >
+        test
+        <!-- <input
           type="button"
           class="banner_filterForm_searchBtn"
           @click.prevent="
@@ -77,9 +87,8 @@
             sendFilterData();
           "
           value="搜尋"
-          :disabled="!this.selectedCityValue"
           ref="filterBtn"
-        />
+        /> -->
       </router-link>
     </div>
   </div>
@@ -198,6 +207,7 @@ export default {
   },
   methods: {
     closeMask() {
+      console.log('關閉');
       // 到 HeaderSection.vue
       this.$emit('closeMask');
     },
@@ -205,6 +215,7 @@ export default {
       try {
         const placeResponse = await this.axios.get(this.placeUrl, this.config);
         this.filteredData = placeResponse.data;
+        console.log('placeData', this.filteredData);
 
         // 傳送資料給 PopularSection.vue
         this.emitter.emit('filteredData', {
@@ -212,7 +223,7 @@ export default {
           filteredTypeData: '熱門景點'
         });
 
-        console.log('placeData', this.filteredData);
+        console.log('placeData end');
       } catch (error) {
         console.log(error);
       }

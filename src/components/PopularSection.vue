@@ -93,12 +93,12 @@ export default {
       const start = page * perPage - perPage;
       const end = page * perPage;
 
-      console.log('currentPage', page);
-      console.log('perPage', perPage);
-      console.log('start', start);
-      console.log('end', end);
-      console.log('更新前 paginatedData - setPageData', this.paginatedData);
-      console.log('setPageData 切割結果', data.slice(start, end));
+      // console.log('currentPage', page);
+      // console.log('perPage', perPage);
+      // console.log('start', start);
+      // console.log('end', end);
+      // console.log('更新前 paginatedData - setPageData', this.paginatedData);
+      // console.log('setPageData 切割結果', data.slice(start, end));
 
       return data.slice(start, end);
     },
@@ -112,7 +112,7 @@ export default {
       // this.paginatedData = this.data;
       this.paginatedData = this.setPageData(this.data);
       this.setPageButton(this.data);
-      console.log('paginatedData - watch data', this.paginatedData);
+      // console.log('paginatedData - watch data', this.paginatedData);
     },
     currentPage() {
       // 當所在頁面變動時，重新賦值給 paginatedData
@@ -120,7 +120,7 @@ export default {
       if (!this.searchData) {
         console.log('執行條件');
         this.paginatedData = this.setPageData(this.data);
-        console.log('paginatedData - currentPage', this.paginatedData);
+        // console.log('paginatedData - currentPage', this.paginatedData);
 
         return;
       }
@@ -143,9 +143,8 @@ export default {
     }
   },
   created() {
-    console.log('resultType', this.resultType);
-
     console.log('PopulatSection created');
+
     // 接收篩選資料 from FilterSection.vue
     this.emitter.on('filteredData', (data) => {
       this.searchData = data.filteredData;
@@ -154,7 +153,7 @@ export default {
       console.log('emit on searchTypeData', this.searchTypeData);
     });
 
-    // 接收搜尋資料 from FilterSection.vue
+    // 接收搜尋資料 from HeaderSection.vue
     this.emitter.on('searchData', (data) => {
       this.searchData = data.searchData;
       this.searchTypeData = data.title;
@@ -163,7 +162,7 @@ export default {
     });
   },
   beforeUnmount() {
-    console.log('PopularSection beforeUnmont');
+    // console.log('PopularSection beforeUnmont');
     this.emitter.off('filteredData', (data) => {
       this.searchData = data.filteredData;
       this.searchTypeData = data.filteredTypeData;

@@ -106,7 +106,7 @@
       line-height: 1.2;
 
       a {
-        margin-left: 20px;
+        // margin-left: 20px;
         background: $color-primary;
         border-radius: 5px;
 
@@ -136,8 +136,15 @@
       }
     }
 
-    .info_details_address a {
-      padding: 8px;
+    .info_details_address {
+      a {
+        padding: 8px;
+      }
+
+      span {
+        display: inline-block;
+        margin-bottom: 15px;
+      }
     }
   }
 }

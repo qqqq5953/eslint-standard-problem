@@ -61,7 +61,7 @@ export default {
           this.config
         );
         this.placeData = placeResponse.data;
-        console.log('預設資料 placeData', this.placeData);
+        // console.log('預設資料 placeData', this.placeData);
       } catch (error) {
         console.log(error);
       }
@@ -73,7 +73,7 @@ export default {
           this.config
         );
         this.foodData = foodResponse.data;
-        console.log('預設資料 foodData', this.foodData);
+        // console.log('預設資料 foodData', this.foodData);
       } catch (error) {
         console.log(error);
       }
@@ -85,7 +85,7 @@ export default {
           this.config
         );
         this.eventData = eventResponse.data;
-        console.log('預設資料 eventData', this.eventData);
+        // console.log('預設資料 eventData', this.eventData);
       } catch (error) {
         console.log(error);
       }

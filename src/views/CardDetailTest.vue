@@ -19,9 +19,9 @@
           </div>
           <div class="info_details">
             <h3>資訊</h3>
-            <div>
+            <div class="info_details_phone">
               <h4>電話：</h4>
-              <div class="info_details_phone">
+              <div>
                 <input
                   id="phoneNumber"
                   type="text"
@@ -105,7 +105,7 @@
             href="#officialSite_section"
             class="noDataWarning"
             v-if="noDataWarning"
-            @click="showTable"
+            @click.prevent="showTable"
             >查無資料!<br />查看官網活動 <i class="fas fa-chevron-down"></i
           ></a>
           <Card :item="cardItem" v-if="isCardShown" :txt="temp">
@@ -125,6 +125,10 @@
             </template>
           </Card>
         </section>
+        <OfficialSite
+          :item="officialSiteData"
+          v-if="isTableShown"
+        ></OfficialSite>
       </section>
     </div>
   </div>
@@ -132,7 +136,12 @@
 
 <script>
 import L from 'leaflet';
+import OfficialSite from '@/components/OfficialSite.vue';
+
 export default {
+  components: {
+    OfficialSite
+  },
   data() {
     return {
       // 地圖資料
@@ -653,6 +662,12 @@ export default {
         shadowSize: [41, 41]
       });
       return iconObject;
+    },
+    copyToClipBoard() {
+      const phoneNumber = document.getElementById('phoneNumber');
+      phoneNumber.select();
+      document.execCommand('copy');
+      alert('已複製電話至剪貼簿');
     }
   },
   created() {
